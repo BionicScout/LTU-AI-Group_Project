@@ -304,117 +304,117 @@
 
    <!-- JavaScript -->
    <script>
-    // Function to retrieve cell values and store them in a 2D array
-    function getBoardAs2DArray() {
-        /*
-        var boardValues = [];
-        // Loop through each box
-        $(".box").each(function(index) {
-            var boxValues = [];
-            // Loop through each input element within the box
-            $(this).find(".cell").each(function() {
-                // Push the value of the input element to the boxValues array
-                boxValues.push($(this).val());
-            });
-            // Push the boxValues array to the boardValues array
-            boardValues.push(boxValues);
-        });*/
+        // Function to retrieve cell values and store them in a 2D array
+        function getBoardAs2DArray() {
+            /*
+            var boardValues = [];
+            // Loop through each box
+            $(".box").each(function(index) {
+                var boxValues = [];
+                // Loop through each input element within the box
+                $(this).find(".cell").each(function() {
+                    // Push the value of the input element to the boxValues array
+                    boxValues.push($(this).val());
+                });
+                // Push the boxValues array to the boardValues array
+                boardValues.push(boxValues);
+            });*/
 
-        //Get boxes by id
-        var boxes = [];
-        for (var i = 1; i < 10; i++) {
-            boxes.push(document.getElementById("box-" + String(i))); // Corrected toString to String
-        }
+            //Get boxes by id
+            var boxes = [];
+            for (var i = 1; i < 10; i++) {
+                boxes.push(document.getElementById("box-" + String(i))); // Corrected toString to String
+            }
 
-        //Get 1D Array of values
-        var values = [];
-        boxes.forEach(box => {
-            var columns = box.querySelectorAll('.box-colum');
-            columns.forEach(column => {
-                var cells = column.querySelectorAll('.cell');
-                cells.forEach(cell => {
-                    values.push(cell.value);
+            //Get 1D Array of values
+            var values = [];
+            boxes.forEach(box => {
+                var columns = box.querySelectorAll('.box-colum');
+                columns.forEach(column => {
+                    var cells = column.querySelectorAll('.cell');
+                    cells.forEach(cell => {
+                        values.push(cell.value);
+                    });
                 });
             });
-        });
-        
-        //Using the row, colum, and box indexes, convert the 1d array into a 2d array
-        var gameBoard = [[], [], [], [], [], [], [], [], []]
-        for(var box = 0; box < 9; box++){
-            for(var row = 0; row < 3; row++){
+            
+            //Using the row, colum, and box indexes, convert the 1d array into a 2d array
+            var gameBoard = [[], [], [], [], [], [], [], [], []]
+            for(var box = 0; box < 9; box++){
+                for(var row = 0; row < 3; row++){
+                    for(var col = 0; col < 3; col++){
+                        value = values[(9*box) + (3*col) + row];
+                        gameBoard[(3 * Math.floor(box / 3)) + row].push(value) 
+                    }
+                }
+
+            }
+
+            //Display Copied Board
+            console.log(gameBoard)
+
+            // Return the 2D array containing cell values
+            return gameBoard;
+        }
+
+        // Function to initialize the Sudoku board with values from a 2D array
+        function initializeBoard(gameBoard) {
+            //Using the row, colum, and box indexes, convert the 2d array into a 1d array
+            var values = [];
+            for(var box = 0; box < 9; box++){
                 for(var col = 0; col < 3; col++){
-                    value = values[(9*box) + (3*col) + row];
-                    gameBoard[(3 * Math.floor(box / 3)) + row].push(value) 
+                    for(var row = 0; row < 3; row++){                
+                        value = gameBoard[(3 * Math.floor(box / 3)) + row][(3 * (box % 3)) + col]
+
+                        if(value == "*")
+                            value = ""
+
+                        values.push(value);
+                    }
                 }
+
             }
 
-        }
-
-        //Display Copied Board
-        console.log(gameBoard)
-
-        // Return the 2D array containing cell values
-        return gameBoard;
-    }
-
-    // Function to initialize the Sudoku board with values from a 2D array
-    function initializeBoard(gameBoard) {
-        //Using the row, colum, and box indexes, convert the 2d array into a 1d array
-        var values = [];
-        for(var box = 0; box < 9; box++){
-            for(var col = 0; col < 3; col++){
-                for(var row = 0; row < 3; row++){                
-                    value = gameBoard[(3 * Math.floor(box / 3)) + row][(3 * (box % 3)) + col]
-
-                    if(value == "*")
-                        value = ""
-
-                    values.push(value);
-                }
+            //Get boxes by id
+            var boxes = [];
+            for (var i = 1; i < 10; i++) {
+                boxes.push(document.getElementById("box-" + String(i))); // Corrected toString to String
             }
 
-        }
-
-        //Get boxes by id
-        var boxes = [];
-        for (var i = 1; i < 10; i++) {
-            boxes.push(document.getElementById("box-" + String(i))); // Corrected toString to String
-        }
-
-        //Set 1D Array of values to board
-        valueIndex = 0;
-        boxes.forEach(box => {
-            var columns = box.querySelectorAll('.box-colum');
-            columns.forEach(column => {
-                var cells = column.querySelectorAll('.cell');
-                cells.forEach(cell => {
-                    cell.value = values[valueIndex];
-                    valueIndex++;
+            //Set 1D Array of values to board
+            valueIndex = 0;
+            boxes.forEach(box => {
+                var columns = box.querySelectorAll('.box-colum');
+                columns.forEach(column => {
+                    var cells = column.querySelectorAll('.cell');
+                    cells.forEach(cell => {
+                        cell.value = values[valueIndex];
+                        valueIndex++;
+                    });
                 });
             });
-        });
-    }
+        }
 
-    // Example 2D array representing a Sudoku board
-    var exampleBoard = [
-        ['*', 2, 3, 4, 5, 6, 7, 8, 9],
-        [9, '*', 2, 3, 4, 5, 6, 7, 8],
-        [8, 9, '*', 2, 3, 4, 5, 6, 7],
-        [7, 8, 9, '*', 2, 3, 4, 5, 6],
-        [6, 7, 8, 9, '*', 2, 3, 4, 5],
-        [5, 6, 7, 8, 9, '*', 2, 3, 4],
-        [4, 5, 6, 7, 8, 9, '*', 2, 3],
-        [3, 4, 5, 6, 7, 8, 9, '*', 2],
-        [2, 3, 4, 5, 6, 7, 8, 9, '*']
-    ];
+        // Example 2D array representing a Sudoku board
+        var exampleBoard = [
+            ['*', 2, 3, 4, 5, 6, 7, 8, 9],
+            [9, '*', 2, 3, 4, 5, 6, 7, 8],
+            [8, 9, '*', 2, 3, 4, 5, 6, 7],
+            [7, 8, 9, '*', 2, 3, 4, 5, 6],
+            [6, 7, 8, 9, '*', 2, 3, 4, 5],
+            [5, 6, 7, 8, 9, '*', 2, 3, 4],
+            [4, 5, 6, 7, 8, 9, '*', 2, 3],
+            [3, 4, 5, 6, 7, 8, 9, '*', 2],
+            [2, 3, 4, 5, 6, 7, 8, 9, '*']
+        ];
 
-    // Initialize the Sudoku board with the example 2D array
-    initializeBoard(exampleBoard);
+        // Initialize the Sudoku board with the example 2D array
+        initializeBoard(exampleBoard);
 
-    // Example usage:
-    var sudokuBoard = getBoardAs2DArray();
-    console.log(sudokuBoard); // Output the 2D array to the console for demonstration
-</script>
+        // Example usage:
+        var sudokuBoard = getBoardAs2DArray();
+        console.log(sudokuBoard); // Output the 2D array to the console for demonstration
+    </script>
 
 
 
