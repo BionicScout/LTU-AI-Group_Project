@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sample App</title>
+    </head>
+    <body>
+        <h1>Data Table</h1>
+        {% for table in tables %}
+            {{ table|safe }}
+        {% endfor %}
+    </body>
+
+    <script>
+        fetch('http://localhost:8080/solve', {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+
+            if(true){
+                console.log(data);
+                console.log(Array.isArray(data.updates));
+
+                // Check if data is defined and data.updates is an array
+                if (!data || !Array.isArray(data.updates)) {
+                    throw new Error('Invalid data received from backend');
+                }
+
+
+                // Initialize a queue to store updates
+                const updatesQueue = [];
+        
+                // Iterate over each update in the data
+                data.updates.forEach(update => {
+                    console.log("Hello")
+                    /* Extract relevant information from the update
+                    const solveType = update.solve_type;
+                    const eliminations = update.eliminations;
+                    const foundValue = update.found_value;
+                    const group = update.group;
+        
+                    // Create an object to represent the update
+                    const updateInfo = {
+                        solveType: solveType,
+                        eliminations: eliminations,
+                        foundValue: foundValue,
+                        group: group
+                    };
+        
+                    // Add the update to the queue
+                    updatesQueue.push(updateInfo);*/
+                });
+        
+                // Now updatesQueue contains all updates split into individual objects
+                console.log(updatesQueue);
+            }
+            else{
+                console.log(data)
+            }
+        })
+        .catch(error => console.error('Error: ', error));
+    </script>
+    
+
+</html>
