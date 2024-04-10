@@ -16,31 +16,26 @@
         fetch('http://localhost:8080/solve', {
             method: 'POST'
         })
-        .then(response => response.json())
+        .then(response => {
+            // Parse the JSON response
+            return response.json();
+        })
         .then(data => {
+            info = JSON.parse(data);
 
-            if(true){
-                console.log(data);
-                console.log(Array.isArray(data.updates));
-
-                // Check if data is defined and data.updates is an array
-                if (!data || !Array.isArray(data.updates)) {
-                    throw new Error('Invalid data received from backend');
-                }
-
-
+            // Check if data exists and if it contains updates
+            if (data && Array.isArray(info.updates)) {
                 // Initialize a queue to store updates
                 const updatesQueue = [];
-        
+            
                 // Iterate over each update in the data
-                data.updates.forEach(update => {
-                    console.log("Hello")
-                    /* Extract relevant information from the update
+                info.updates.forEach(update => {
+                    // Extract relevant information from the update
                     const solveType = update.solve_type;
                     const eliminations = update.eliminations;
                     const foundValue = update.found_value;
                     const group = update.group;
-        
+            
                     // Create an object to represent the update
                     const updateInfo = {
                         solveType: solveType,
@@ -48,19 +43,19 @@
                         foundValue: foundValue,
                         group: group
                     };
-        
+            
                     // Add the update to the queue
-                    updatesQueue.push(updateInfo);*/
+                    updatesQueue.push(updateInfo);
                 });
-        
+            
                 // Now updatesQueue contains all updates split into individual objects
                 console.log(updatesQueue);
-            }
-            else{
-                console.log(data)
+            } else {
+                console.log('Invalid data received from backend');
             }
         })
         .catch(error => console.error('Error: ', error));
+
     </script>
     
 
