@@ -56,6 +56,27 @@
         })
         .catch(error => console.error('Error: ', error));
 
+        fetch('http://localhost:8080/load', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // Specify the content type as JSON
+            },
+            body: JSON.stringify({ fileName: 'Puzzle_1.txt' }) // Send the file name in the request body
+        })
+        .then(response => {
+            // Check if the response is ok
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            // Parse the JSON response
+            return response.json();
+        })
+        .then(data => {
+            // Parse the JSON data if necessary (depending on the response from the backend)
+            console.log(data);
+        })
+        .catch(error => console.error('Error: ', error));
+
     </script>
     
 
