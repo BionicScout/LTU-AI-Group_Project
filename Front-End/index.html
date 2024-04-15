@@ -56,6 +56,8 @@
         })
         .catch(error => console.error('Error: ', error));
 
+        var board = null;
+
         fetch('http://localhost:8080/load', {
             method: 'POST',
             headers: {
@@ -74,8 +76,40 @@
         .then(data => {
             // Parse the JSON data if necessary (depending on the response from the backend)
             console.log(data);
+            board = data;
         })
         .catch(error => console.error('Error: ', error));
+
+        /*
+        fetch('http://localhost:8080/newBoard', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                fileName: 'custom_sudoku_board.txt',
+                sudokuBoard: [
+                    ['8', '2', '1', '*', '*', '*', '*', '*', '7'],
+                    ['*', '*', '*', '8', '*', '*', '*', '6', '*'],
+                    ['*', '6', '*', '9', '3', '*', '*', '*', '5'],
+                    ['*', '*', '8', '2', '*', '1', '6', '*', '*'],
+                    ['*', '*', '*', '7', '*', '*', '2', '8', '4'],
+                    ['2', '4', '*', '6', '*', '3', '7', '*', '*'],
+                    ['6', '*', '5', '*', '*', '*', '1', '*', '3'],
+                    ['*', '7', '*', '*', '5', '*', '*', '*', '*'],
+                    ['9', '1', '2', '*', '*', '*', '*', '6', '*']
+                ]
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => console.error('Error:', error));
+
+        console.log("Hi");
+        */
+
 
     </script>
     
