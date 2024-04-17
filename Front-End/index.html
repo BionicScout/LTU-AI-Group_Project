@@ -80,14 +80,13 @@
         })
         .catch(error => console.error('Error: ', error));
 
-        /*
-        fetch('http://localhost:8080/newBoard', {
+
+        fetch('http://localhost:8080/customBoard', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                fileName: 'custom_sudoku_board.txt',
                 sudokuBoard: [
                     ['8', '2', '1', '*', '*', '*', '*', '*', '7'],
                     ['*', '*', '*', '8', '*', '*', '*', '6', '*'],
@@ -107,8 +106,6 @@
         })
         .catch(error => console.error('Error:', error));
 
-        console.log("Hi");
-        */
 
 
     </script>
