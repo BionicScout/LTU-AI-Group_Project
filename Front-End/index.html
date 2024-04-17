@@ -21,7 +21,10 @@
             return response.json();
         })
         .then(data => {
+            print(data)
             info = JSON.parse(data);
+
+            print(info)
 
             // Check if data exists and if it contains updates
             if (data && Array.isArray(info.updates)) {
@@ -56,6 +59,7 @@
         })
         .catch(error => console.error('Error: ', error));
 
+        /*
         var board = null;
 
         fetch('http://localhost:8080/load', {
@@ -106,7 +110,7 @@
         })
         .catch(error => console.error('Error:', error));
 
-
+        */
 
     </script>
     
