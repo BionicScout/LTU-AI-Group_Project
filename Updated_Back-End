@@ -898,21 +898,6 @@ def solve_sudoku_csp(board, csp):
             if not constraint_func(board, row, col, num):
                 return False
         return True
-   
-    #call the solving solutions file to apply the solving strategies before using the backtracking function
-
-
-    #import sys
-    #sys.path.append('C:\\Users\\zqasmi\\1ArtificialIntelligence\\Team Project\\LTU-AI-Group_Project-main\\LTU-AI-Group_Project-main')
-
-
-    #import "Solving Strategies.ipynb"
-
-
-    #%run "Solving Strategies.ipynb"
-   
-    # In Main_App.ipynb after running %run
-    #board = main(board)
 
 
     #if the backtracking function returns true, return the board
