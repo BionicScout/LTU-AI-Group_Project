@@ -335,11 +335,14 @@
    <script>
         // Function to retrieve cell values and store them in a 2D array
         function getBoardAs2DArray() {
+            console.log("Hi");
             //Get boxes by id
             var boxes = [];
             for (var i = 1; i < 10; i++) {
                 boxes.push(document.getElementById("box-" + String(i))); // Corrected toString to String
             }
+
+            console.log("Hi");
 
             //Get 1D Array of values
             var values = [];
@@ -353,6 +356,7 @@
                 });
             });
             
+            console.log("Hi1");
             //Using the row, colum, and box indexes, convert the 1d array into a 2d array
             var gameBoard = [[], [], [], [], [], [], [], [], []]
             for(var box = 0; box < 9; box++){
@@ -362,6 +366,8 @@
                         
                         if(value === '')
                             value = 0
+                        else
+                            value = parseInt(value)
 
                         gameBoard[(3 * Math.floor(box / 3)) + row].push(value) 
                     }
@@ -370,7 +376,8 @@
             }
 
             //Display Copied Board
-            console.log(gameBoard)
+            console.log(gameBoard);
+            console.log("Hi");
 
             // Return the 2D array containing cell values
             return gameBoard;
@@ -379,9 +386,10 @@
 
         function handleClick() {
             sessionStorage.clear();
-            //sessionStorage.setItem('key', 'value');
+            sessionStorage.setItem('board', JSON.stringify(getBoardAs2DArray()));
+            console.log(getBoardAs2DArray())
 
-            window.location.replace("http://localhost:8080/Front-End/SolveBoard.html");
+            window.location.assign("http://localhost:8080/Front-End/SolveBoard.html");
         }
 
         // Get the button element by its id
@@ -390,6 +398,8 @@
         // Add an event listener to the button to listen for clicks
         button.addEventListener("click", handleClick);
 
+
+        console.log(getBoardAs2DArray())
     </script>
 
 
