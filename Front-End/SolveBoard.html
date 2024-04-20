@@ -1837,13 +1837,7 @@
 
    <!-- JavaScript -->
    <script>
-        function cellValFound(x, y, val) {
-            cell = getCellFromCoordinates(x, y)
-            cell.innerHTML = `<div>${val}</div>`; // Clear the inner HTML of the box
-            cell.classList.remove('poss-cell');
-            cell.classList.add('cell-val');    
-        }
-
+    ////////////////////////////////////////////////////////
         function getCellFromCoordinates(x, y) {
             // Calculate the box index
             var boxIndex = Math.floor(x / 3) + Math.floor(y / 3) * 3;
@@ -1877,7 +1871,187 @@
 
 
 
-        // Function to retrieve cell values and store them in a 2D array
+        function getCellsFromPage(){
+            //Get all Cells and put them into a board
+            pageBoard = []
+
+            for(x = 0; x < 9; x++){
+                row = []
+
+                for(y = 0; y < 9; y++){
+                    row.push(getCellFromCoordinates(x, y))
+                }
+
+                pageBoard.push(row)
+            }
+
+            return pageBoard
+        }
+
+
+        // Function to initialize the Sudoku board with values from a 2D array
+        function initializeBoard(gameBoard, pageBoard) {
+            pageBoard = getCellsFromPage()
+
+            for(x = 0; x < 9; x++){
+                for(y = 0; y < 9; y++){
+                    console.log("x: " + x + "\ny: " + y + "\nval: " + gameBoard[x][y])
+                    cell = pageBoard[x][y]
+                    cell.innerHTML = `<div>${gameBoard[x][y]}</div>`;; 
+                    cell.classList.remove('poss-cell');
+                    cell.classList.add('cell-val');    
+                }
+            }
+
+        }
+
+
+        //---------------- Fetching Solve Solution --------------------
+        function solve() {
+            return new Promise((resolve, reject) => {
+                fetch('http://localhost:8080/solve', {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        // Parse the JSON response
+                        return response.json();
+                    })
+                    .then(data => {
+                        info = JSON.parse(data);
+                        console.log(info)
+
+                        updatesQueue = solve_parseUpdate(info);
+                        console.log(updatesQueue);
+
+                        board = solve_parseBoard(info.board);
+                        console.log(board);
+
+                        initialBoard = solve_parseBoard(info.initialBoard);
+                        console.log(initialBoard);
+
+                        addedVals = solve_parseAddedVals(info);
+                        console.log(addedVals);
+
+                        resolve([updatesQueue, board, addedVals]);
+                    })
+                    .catch(error => reject(error));
+                });
+        }
+
+
+
+        function solve_parseUpdate(info){
+            // Initialize a queue to store updates
+            const updatesQueue = [];
+        
+            // Iterate over each update in the data
+            info.updates.forEach(update => {
+                // Extract relevant information from the update
+                const solveType = update.solve_type;
+                const eliminations = update.eliminations;
+                const foundValue = update.found_value;
+                const group = update.group;
+        
+                // Create an object to represent the update
+                const updateInfo = {
+                    solveType: solveType,
+                    eliminations: eliminations,
+                    foundValue: foundValue,
+                    group: group
+                };
+        
+                // Add the update to the queue
+                updatesQueue.push(updateInfo);
+            });
+        
+            // Now updatesQueue contains all updates split into individual objects
+            return updatesQueue
+        }
+
+        function solve_parseBoard(info){
+            // Initialize a queue to store updates
+            const board = [];
+        
+            // Iterate over each update in the data
+            info.forEach(rowInfo => {
+                const row = [];
+
+                rowInfo.forEach(val => {
+                    row.push(val);
+                })
+
+                // Add the update to the queue
+                board.push(row);
+            });
+        
+            // Now updatesQueue contains all updates split into individual objects
+            return board
+        }
+
+        function solve_parseAddedVals(info){
+            // Initialize a queue to store updates
+            const addedVals = [];
+            
+            // Iterate over each update in the data
+            info.added.forEach(valSet => {
+                // Extract relevant information from the update
+                const val = valSet.val;
+                const coord = valSet.coord;
+   
+        
+                // Create an object to represent the update
+                const parsedVal = {
+                    val: val,
+                    coord: coord
+                };
+        
+                // Add the update to the queue
+                addedVals.push(parsedVal);
+            });
+        
+            // Now updatesQueue contains all updates split into individual objects
+            return addedVals
+        }
+
+
+        ////////////////////////////////////////////////////////
+
+
+        //
+        pageBoard = getCellsFromPage()
+
+        let solvePromise = solve();
+        let updatesQueue = null;
+        let board = null;
+        let addedVals = null;
+
+
+        // Later, when you need the results
+        solvePromise.then(results => {
+            console.log(results);
+            updatesQueue = results[0];
+            board = results[1];
+            addedVals = results[2];
+        
+            initializeBoard(board, pageBoard);
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // MIGHT BE IMPORTANT
+
+        /*
+                // Function to retrieve cell values and store them in a 2D array
         function getBoardAs2DArray() {
             //Get boxes by id
             var boxes = [];
@@ -1915,51 +2089,7 @@
             // Return the 2D array containing cell values
             return gameBoard;
         }
-
-        // Function to initialize the Sudoku board with values from a 2D array
-        function initializeBoard(gameBoard) {
-            pageBoard = []
-
-            for(x = 0; x < 9; x++){
-                row = []
-
-                for(y = 0; y < 9; y++){
-                    row.push(getCellFromCoordinates(x, y))
-                }
-
-                pageBoard.push(row)
-            }
-
-            for(x = 0; x < 9; x++){
-                for(y = 0; y < 9; y++){
-                    cell = pageBoard[x][y]
-                    cell.innerHTML = `<div>${Math.max(x, y)}</div>`;; 
-                    cell.classList.remove('poss-cell');
-                    cell.classList.add('cell-val');    
-                }
-            }
-
-        }
-
-        // Example 2D array representing a Sudoku board
-        var exampleBoard = [
-            ['*', 2, 3, 4, 5, 6, 7, 8, 9],
-            [9, '*', 2, 3, 4, 5, 6, 7, 8],
-            [8, 9, '*', 2, 3, 4, 5, 6, 7],
-            [7, 8, 9, '*', 2, 3, 4, 5, 6],
-            [6, 7, 8, 9, '*', 2, 3, 4, 5],
-            [5, 6, 7, 8, 9, '*', 2, 3, 4],
-            [4, 5, 6, 7, 8, 9, '*', 2, 3],
-            [3, 4, 5, 6, 7, 8, 9, '*', 2],
-            [2, 3, 4, 5, 6, 7, 8, 9, '*']
-        ];
-
-        // Initialize the Sudoku board with the example 2D array
-        initializeBoard(exampleBoard);
-
-        // Example usage:
-        var sudokuBoard = getBoardAs2DArray();
-        console.log(sudokuBoard); // Output the 2D array to the console for demonstration
+        */
     </script>
 
 
