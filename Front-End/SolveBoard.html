@@ -129,6 +129,25 @@
                 line-height: 14px; /* Center the number vertically */
             }
 
+            #myButton {
+                /* Margins */
+                margin-top: 20px;
+                margin-left: 20px;
+
+                /* Colors */
+                background-color: #22bed8; /* Bright Blue */
+                color: #faf0ca; /* Back Yellow */
+                border: black 3px;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            #myButton:hover {
+                background-color: #131a5f; /* Dark Blue */
+                color: #faf0ca; /* Back Yellow */
+            }
+
         </style>
 
         <!-- Color Pallet --
@@ -1825,6 +1844,12 @@
             
         </div>
 
+        <div></div>
+
+        <button class="myButton" id="myButton">Step</button>
+
+        </div>
+
 
 
 
@@ -1894,10 +1919,18 @@
             pageBoard = getCellsFromPage()
 
             for(x = 0; x < 9; x++){
-                for(y = 0; y < 9; y++){
-                    console.log("x: " + x + "\ny: " + y + "\nval: " + gameBoard[x][y])
+                for(y = 0; y < 9; y++){             
+
+
                     cell = pageBoard[x][y]
-                    cell.innerHTML = `<div>${gameBoard[x][y]}</div>`;; 
+
+                    if(gameBoard[x][y] != 0)              
+                        cell.innerHTML = `<div>${gameBoard[x][y]}</div>`;
+                    else
+                        cell.innerHTML = `<div></div>`;
+
+
+
                     cell.classList.remove('poss-cell');
                     cell.classList.add('cell-val');    
                 }
@@ -1923,8 +1956,8 @@
                         updatesQueue = solve_parseUpdate(info);
                         console.log(updatesQueue);
 
-                        board = solve_parseBoard(info.board);
-                        console.log(board);
+                        finalBoard = solve_parseBoard(info.board);
+                        console.log(finalBoard);
 
                         initialBoard = solve_parseBoard(info.initialBoard);
                         console.log(initialBoard);
@@ -1932,13 +1965,11 @@
                         addedVals = solve_parseAddedVals(info);
                         console.log(addedVals);
 
-                        resolve([updatesQueue, board, addedVals]);
+                        resolve([updatesQueue, finalBoard, addedVals, initialBoard]);
                     })
                     .catch(error => reject(error));
                 });
         }
-
-
 
         function solve_parseUpdate(info){
             // Initialize a queue to store updates
@@ -2030,14 +2061,51 @@
         solvePromise.then(results => {
             console.log(results);
             updatesQueue = results[0];
-            board = results[1];
+            finalBoard = results[1];
             addedVals = results[2];
+            initialBoard = results[3];
         
-            initializeBoard(board, pageBoard);
+            initializeBoard(initialBoard, pageBoard);
         });
 
 
 
+        ///////////
+        // Define the function to be called when the button is clicked
+        function handleClick() {
+            solvePromise.then(results => {
+            console.log(results);
+            updatesQueue = results[0];
+            finalBoard = results[1];
+            addedVals = results[2];
+            initialBoard = results[3];
+
+
+            for(x = 0; x < 9; x++){
+                for(y = 0; y < 9; y++){             
+
+
+                    cell = pageBoard[x][y]
+
+                    if(finalBoard[x][y] != 0)              
+                        cell.innerHTML = `<div>${finalBoard[x][y]}</div>`;
+                    else
+                        cell.innerHTML = `<div></div>`;
+
+
+
+                    cell.classList.remove('poss-cell');
+                    cell.classList.add('cell-val');    
+                }
+            }
+        });
+        }
+
+        // Get the button element by its id
+        var button = document.getElementById("myButton");
+
+        // Add an event listener to the button to listen for clicks
+        button.addEventListener("click", handleClick);
 
 
 
