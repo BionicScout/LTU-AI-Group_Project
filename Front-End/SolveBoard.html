@@ -1940,35 +1940,73 @@
 
 
         //---------------- Fetching Solve Solution --------------------
+        function solveCustom(inputBoard) {
+            return new Promise((resolve, reject) => {
+                fetch('http://localhost:8080/customBoard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sudokuBoard: inputBoard
+                    })
+                })
+                .then(response => {
+                    // Parse the JSON response
+                    return response.json();
+                })
+                .then(data => {
+                    info = JSON.parse(data);
+                    console.log(info)
+
+                    updatesQueue = solve_parseUpdate(info);
+                    console.log(updatesQueue);
+
+                    finalBoard = solve_parseBoard(info.board);
+                    console.log(finalBoard);
+
+                    initialBoard = solve_parseBoard(info.initialBoard);
+                    console.log(initialBoard);
+
+                    addedVals = solve_parseAddedVals(info);
+                    console.log(addedVals);
+
+                    resolve([updatesQueue, finalBoard, addedVals, initialBoard]);
+                })
+                .catch(error => reject(error));
+            });
+        }
+
+
         function solve() {
             return new Promise((resolve, reject) => {
                 fetch('http://localhost:8080/solve', {
-                        method: 'POST'
-                    })
-                    .then(response => {
-                        // Parse the JSON response
-                        return response.json();
-                    })
-                    .then(data => {
-                        info = JSON.parse(data);
-                        console.log(info)
+                    method: 'POST'
+                })
+                .then(response => {
+                    // Parse the JSON response
+                    return response.json();
+                })
+                .then(data => {
+                    info = JSON.parse(data);
+                    console.log(info)
 
-                        updatesQueue = solve_parseUpdate(info);
-                        console.log(updatesQueue);
+                    updatesQueue = solve_parseUpdate(info);
+                    console.log(updatesQueue);
 
-                        finalBoard = solve_parseBoard(info.board);
-                        console.log(finalBoard);
+                    finalBoard = solve_parseBoard(info.board);
+                    console.log(finalBoard);
 
-                        initialBoard = solve_parseBoard(info.initialBoard);
-                        console.log(initialBoard);
+                    initialBoard = solve_parseBoard(info.initialBoard);
+                    console.log(initialBoard);
 
-                        addedVals = solve_parseAddedVals(info);
-                        console.log(addedVals);
+                    addedVals = solve_parseAddedVals(info);
+                    console.log(addedVals);
 
-                        resolve([updatesQueue, finalBoard, addedVals, initialBoard]);
-                    })
-                    .catch(error => reject(error));
-                });
+                    resolve([updatesQueue, finalBoard, addedVals, initialBoard]);
+                })
+                .catch(error => reject(error));
+            });
         }
 
         function solve_parseUpdate(info){
@@ -2051,7 +2089,18 @@
         //
         pageBoard = getCellsFromPage()
 
-        let solvePromise = solve();
+        let solvePromise = solveCustom([
+            [5, 3, 0, 0, 7, 0, 0, 0, 0],
+            [6, 0, 0, 1, 9, 5, 0, 0, 0],
+            [0, 9, 8, 0, 0, 0, 0, 6, 0],
+            [8, 0, 0, 0, 6, 0, 0, 0, 3],
+            [4, 0, 0, 8, 0, 3, 0, 0, 1],
+            [7, 0, 0, 0, 2, 0, 0, 0, 6],
+            [0, 6, 0, 0, 0, 0, 2, 8, 0],
+            [0, 0, 0, 4, 1, 9, 0, 0, 5],
+            [0, 0, 0, 0, 8, 0, 0, 7, 9]
+            ]
+        );
         let updatesQueue = null;
         let board = null;
         let addedVals = null;
@@ -2108,56 +2157,6 @@
         button.addEventListener("click", handleClick);
 
 
-
-
-
-
-
-
-
-
-        // MIGHT BE IMPORTANT
-
-        /*
-                // Function to retrieve cell values and store them in a 2D array
-        function getBoardAs2DArray() {
-            //Get boxes by id
-            var boxes = [];
-            for (var i = 1; i < 10; i++) {
-                boxes.push(document.getElementById("box-" + String(i))); // Corrected toString to String
-            }
-
-            //Get 1D Array of values
-            var values = [];
-            boxes.forEach(box => {
-                var columns = box.querySelectorAll('.box-colum');
-                columns.forEach(column => {
-                    var cells = column.querySelectorAll('.cell');
-                    cells.forEach(cell => {
-                        values.push(cell.value);
-                    });
-                });
-            });
-            
-            //Using the row, colum, and box indexes, convert the 1d array into a 2d array
-            var gameBoard = [[], [], [], [], [], [], [], [], []]
-            for(var box = 0; box < 9; box++){
-                for(var row = 0; row < 3; row++){
-                    for(var col = 0; col < 3; col++){
-                        value = values[(9*box) + (3*col) + row];
-                        gameBoard[(3 * Math.floor(box / 3)) + row].push(value) 
-                    }
-                }
-
-            }
-
-            //Display Copied Board
-            console.log(gameBoard)
-
-            // Return the 2D array containing cell values
-            return gameBoard;
-        }
-        */
     </script>
 
 

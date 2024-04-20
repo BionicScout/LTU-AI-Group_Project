@@ -68,6 +68,26 @@
 
                 background-color: #131a5f;
             }
+
+            #myButton {
+                /* Margins */
+                margin-top: 20px;
+                margin-left: 20px;
+
+                /* Colors */
+                background-color: #22bed8; /* Bright Blue */
+                color: #faf0ca; /* Back Yellow */
+                border: black 3px;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            #myButton:hover {
+                background-color: #131a5f; /* Dark Blue */
+                color: #faf0ca; /* Back Yellow */
+            }
+
         </style>
 
         <!-- Color Pallet --
@@ -304,26 +324,17 @@
             </div>            
             
         </div>
+
+        <div></div>
+
+        <button class="myButton" id="myButton">Solve</button>
+
    </Body>
 
    <!-- JavaScript -->
    <script>
         // Function to retrieve cell values and store them in a 2D array
         function getBoardAs2DArray() {
-            /*
-            var boardValues = [];
-            // Loop through each box
-            $(".box").each(function(index) {
-                var boxValues = [];
-                // Loop through each input element within the box
-                $(this).find(".cell").each(function() {
-                    // Push the value of the input element to the boxValues array
-                    boxValues.push($(this).val());
-                });
-                // Push the boxValues array to the boardValues array
-                boardValues.push(boxValues);
-            });*/
-
             //Get boxes by id
             var boxes = [];
             for (var i = 1; i < 10; i++) {
@@ -348,6 +359,10 @@
                 for(var row = 0; row < 3; row++){
                     for(var col = 0; col < 3; col++){
                         value = values[(9*box) + (3*col) + row];
+                        
+                        if(value === '')
+                            value = 0
+
                         gameBoard[(3 * Math.floor(box / 3)) + row].push(value) 
                     }
                 }
@@ -361,63 +376,20 @@
             return gameBoard;
         }
 
-        // Function to initialize the Sudoku board with values from a 2D array
-        function initializeBoard(gameBoard) {
-            //Using the row, colum, and box indexes, convert the 2d array into a 1d array
-            var values = [];
-            for(var box = 0; box < 9; box++){
-                for(var col = 0; col < 3; col++){
-                    for(var row = 0; row < 3; row++){                
-                        value = gameBoard[(3 * Math.floor(box / 3)) + row][(3 * (box % 3)) + col]
 
-                        if(value == "*")
-                            value = ""
+        function handleClick() {
+            sessionStorage.clear();
+            //sessionStorage.setItem('key', 'value');
 
-                        values.push(value);
-                    }
-                }
-
-            }
-
-            //Get boxes by id
-            var boxes = [];
-            for (var i = 1; i < 10; i++) {
-                boxes.push(document.getElementById("box-" + String(i))); // Corrected toString to String
-            }
-
-            //Set 1D Array of values to board
-            valueIndex = 0;
-            boxes.forEach(box => {
-                var columns = box.querySelectorAll('.box-colum');
-                columns.forEach(column => {
-                    var cells = column.querySelectorAll('.cell');
-                    cells.forEach(cell => {
-                        cell.value = values[valueIndex];
-                        valueIndex++;
-                    });
-                });
-            });
+            window.location.replace("http://localhost:8080/Front-End/SolveBoard.html");
         }
 
-        // Example 2D array representing a Sudoku board
-        var exampleBoard = [
-            ['*', 2, 3, 4, 5, 6, 7, 8, 9],
-            [9, '*', 2, 3, 4, 5, 6, 7, 8],
-            [8, 9, '*', 2, 3, 4, 5, 6, 7],
-            [7, 8, 9, '*', 2, 3, 4, 5, 6],
-            [6, 7, 8, 9, '*', 2, 3, 4, 5],
-            [5, 6, 7, 8, 9, '*', 2, 3, 4],
-            [4, 5, 6, 7, 8, 9, '*', 2, 3],
-            [3, 4, 5, 6, 7, 8, 9, '*', 2],
-            [2, 3, 4, 5, 6, 7, 8, 9, '*']
-        ];
+        // Get the button element by its id
+        var button = document.getElementById("myButton");
 
-        // Initialize the Sudoku board with the example 2D array
-        initializeBoard(exampleBoard);
+        // Add an event listener to the button to listen for clicks
+        button.addEventListener("click", handleClick);
 
-        // Example usage:
-        var sudokuBoard = getBoardAs2DArray();
-        console.log(sudokuBoard); // Output the 2D array to the console for demonstration
     </script>
 
 
