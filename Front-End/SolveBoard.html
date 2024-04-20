@@ -14,40 +14,6 @@
 
         <!-- CSS -->
         <style>
-            .game-board{
-                background-color: #131a5f; 
-
-                display: inline-block; /* Add this to contain the bounds of the board */
-                padding: 5px; /* Optional: Add padding for visual appeal */
-            }
-
-            .cell {
-                /* Dimentions and Margins*/
-                width: 50px; 
-                height: 50px;
-                
-                margin-right: 0;
-                margin-left: 0;
-
-                /* Border and Background */
-                border: 1px solid #131a5f;
-                border-radius: 0px;
-                
-                background-color: #faf0ca;
-
-                /* Text */
-                text-align: center; 
-                line-height: 50px; 
-
-                color: #22bed8;
-            }
-
-            .disabled {
-                background-color: #faf0ca;
-
-                color: black;
-            }
-
             .box-row
             {
                 display: flex; /* Use flexbox */
@@ -58,11 +24,6 @@
             {
                 display: flex; /* Use flexbox */
                 justify-content: space-between; /* Distribute space between cells */
-            }
-
-            .cell-val
-            {
-                font-size: 10px;
             }
 
             .divider-vertical {
@@ -81,23 +42,93 @@
             }
 
 
-
-
-
-
-
-            .grid-container {
-                border: 1px solid #ccc;
-                text-align: center;
+            .cell-val {
+                /* Dimentions and Margins*/
                 width: 50px; 
-                margin: 0px;
-                padding: 0px;
+                height: 50px;
+                
+                margin-right: 0;
+                margin-left: 0;
+
+                /* Border and Background */
+                border: 1px solid #131a5f;
+                border-radius: 0px;
+                
+                background-color: #faf0ca;
+
+                /* Text */
+                text-align: center; 
+                line-height: 50px;
+                
+                font-size: 25px;
+                color: #22bed8;
+            }
+
+            /*Board and Dividers*/
+
+            .divider-vertical {
+                width: 3px; 
+                height: 150px;
+
+                background-color: #131a5f;
+            }
+
+            
+            .divider-horizontal {
+                width: 456px; 
+                height: 3px;
+
+                background-color: #131a5f;
+            }
+
+            .game-board{
+                background-color: #131a5f; 
+
+                display: inline-block; /* Add this to contain the bounds of the board */
+                padding: 5px; /* Optional: Add padding for visual appeal */
                 
             }
-            .grid-digits {
-                font-size: 10px;
-                line-height: 1.5;
+
+            /*Possiblties Cell*/
+            .poss-cell {
+                /* Dimentions and Margins*/
+                width: 50px; 
+                height: 50px;
+                
+                margin: 0 auto;
+                /* Border and Background */
+                border: 1px solid #131a5f;
+                border-radius: 0px;
+                
+                background-color: #faf0ca;
+
+                /* Text */
+                text-align: center; 
+                line-height: 50px; 
+
+                color: #22bed8;
+
+                /*Sub Grid*/
+                display: flex;
+                flex-wrap: wrap;
             }
+
+            .poss-row {
+                display: flex;
+                flex-wrap: wrap;
+                width: 50px;
+                margin-left: -1px;
+                margin-bottom: -1px;
+            }
+
+            .poss-val {
+                width: 16px; /* Adjust the width of each cell */
+                height: 16px; /* Adjust the height of each cell */
+                box-sizing: border-box; /* Include border in width/height calculations */
+                text-align: center;
+                line-height: 14px; /* Center the number vertically */
+            }
+
         </style>
 
         <!-- Color Pallet --
@@ -114,38 +145,191 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+
         <div class="game-board">
 
             <!-- Box Row (1-3) -->
             <div class="d-flex justify-content-start">
                 <!-- Box 1 -->
                 <div class="box" id="box-1">
-                    <div class="box-row d-flex justify-content-start">
+                    <div class="box-row d-flex justify-content-start">             
                         <div class="box-colum">
-
-                            <div class="cell d-flex justify-content-start" id="cell">
-                                <div>
-                                    <div>1</div>
-                                    <div>2</div>
-                                    <div>3</div>
+                            <!-- Cell (0,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
                                 </div>
-
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
                             </div>
 
+                            <!-- Cell (0,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
 
+                            <!-- Cell (0,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+                        </div>   
 
-
-                        </div>    
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (1,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (2,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+  
                     </div>
                 </div>
 
@@ -153,22 +337,184 @@
 
                 <!-- Box 2 -->
                 <div class="box" id="box-2">
-                    <div class="box-row d-flex justify-content-start">
+                    <div class="box-row d-flex justify-content-start">             
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                        </div>    
+                            <!-- Cell (0,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+                        </div>   
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (1,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (2,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+  
                     </div>
                 </div>
 
@@ -176,22 +522,184 @@
 
                 <!-- Box 3 -->
                 <div class="box" id="box-3">
-                    <div class="box-row d-flex justify-content-start">
+                    <div class="box-row d-flex justify-content-start">             
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                        </div>    
+                            <!-- Cell (0,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+                        </div>   
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (1,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (2,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+  
                     </div>
                 </div>
 
@@ -203,22 +711,184 @@
             <div class="d-flex justify-content-start">
                 <!-- Box 4 -->
                 <div class="box" id="box-4">
-                    <div class="box-row d-flex justify-content-start">
+                    <div class="box-row d-flex justify-content-start">             
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                        </div>    
+                            <!-- Cell (0,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+                        </div>   
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (1,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (2,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+  
                     </div>
                 </div>
 
@@ -226,22 +896,184 @@
 
                 <!-- Box 5 -->
                 <div class="box" id="box-5">
-                    <div class="box-row d-flex justify-content-start">
+                    <div class="box-row d-flex justify-content-start">             
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                        </div>    
+                            <!-- Cell (0,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+                        </div>   
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (1,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (2,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+  
                     </div>
                 </div>
 
@@ -249,22 +1081,184 @@
 
                 <!-- Box 6 -->
                 <div class="box" id="box-6">
-                    <div class="box-row d-flex justify-content-start">
+                    <div class="box-row d-flex justify-content-start">             
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                        </div>    
+                            <!-- Cell (0,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+                        </div>   
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (1,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (2,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+  
                     </div>
                 </div>
 
@@ -276,22 +1270,184 @@
             <div class="d-flex justify-content-start">
                 <!-- Box 7 -->
                 <div class="box" id="box-7">
-                    <div class="box-row d-flex justify-content-start">
+                    <div class="box-row d-flex justify-content-start">             
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                        </div>    
+                            <!-- Cell (0,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+                        </div>   
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (1,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (2,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+  
                     </div>
                 </div>
 
@@ -299,22 +1455,184 @@
 
                 <!-- Box 8 -->
                 <div class="box" id="box-8">
-                    <div class="box-row d-flex justify-content-start">
+                    <div class="box-row d-flex justify-content-start">             
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                        </div>    
+                            <!-- Cell (0,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+                        </div>   
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (1,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (2,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+  
                     </div>
                 </div>
 
@@ -322,42 +1640,189 @@
 
                 <!-- Box 9 -->
                 <div class="box" id="box-9">
-                    <div class="box-row d-flex justify-content-start">
+                    <div class="box-row d-flex justify-content-start">             
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                        </div>    
+                            <!-- Cell (0,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (0,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+                        </div>   
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (1,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (1,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+
                         <div class="box-colum">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
-                            <input type="number" class="form-control cell" min="1" max="9">
+                            <!-- Cell (2,0) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,1) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
+
+                            <!-- Cell (2,2) of Box -->
+                            <div class="poss-cell">
+                                <div class="poss-row">
+                                    <div class="poss-val">1</div>
+                                    <div class="poss-val">2</div>
+                                    <div class="poss-val">3</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">4</div>
+                                    <div class="poss-val">5</div>
+                                    <div class="poss-val">6</div>
+                                </div>
+                                <div class="poss-row">
+                                    <div class="poss-val">7</div>
+                                    <div class="poss-val">8</div>
+                                    <div class="poss-val">9</div>
+                                </div>
+                            </div>
                         </div>  
+  
                     </div>
                 </div>
 
-            </div>            
+            </div>     
             
-        </div>
-
-
-        <div class="cell row">
-            <div class="row">
-                <div class="col-12">
-                    <div class="grid-container">
-                        <div class="grid-digits">
-                            <span id="digit1">1</span> <span id="digit2">2</span> <span id="digit3">3</span> <br>
-                            <span id="digit4">4</span> <span id="digit5">5</span> <span id="digit6">6</span> <br>
-                            <span id="digit7">7</span> <span id="digit8">8</span> <span id="digit9">9</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
 
@@ -372,23 +1837,48 @@
 
    <!-- JavaScript -->
    <script>
+        function cellValFound(x, y, val) {
+            cell = getCellFromCoordinates(x, y)
+            cell.innerHTML = `<div>${val}</div>`; // Clear the inner HTML of the box
+            cell.classList.remove('poss-cell');
+            cell.classList.add('cell-val');    
+        }
+
+        function getCellFromCoordinates(x, y) {
+            // Calculate the box index
+            var boxIndex = Math.floor(x / 3) + Math.floor(y / 3) * 3;
+
+            // Calculate the cell index within the box
+            var cellIndex = (x % 3) + (y % 3) * 3;
+
+            // Get the box element
+            var box = document.getElementById("box-" + (boxIndex + 1));
+
+            // Get the cell element within the box
+
+            var allCells = [];
+
+            // Iterate through each row in the box
+            var rows = box.querySelectorAll('.box-colum');
+            rows.forEach(row => {
+                // Get all cells in the row
+                var cells = row.querySelectorAll('.poss-cell');
+
+                // Convert NodeList to Array and push to allCells array
+                Array.from(cells).forEach(cell => {
+                    allCells.push(cell);
+                });
+            });
+            cell = allCells[cellIndex]
+
+            //var cell = box.querySelector('.poss-cell:nth-child(' + (cellIndex + 1) + ')');
+            return cell;
+        }
+
+
 
         // Function to retrieve cell values and store them in a 2D array
         function getBoardAs2DArray() {
-            /*
-            var boardValues = [];
-            // Loop through each box
-            $(".box").each(function(index) {
-                var boxValues = [];
-                // Loop through each input element within the box
-                $(this).find(".cell").each(function() {
-                    // Push the value of the input element to the boxValues array
-                    boxValues.push($(this).val());
-                });
-                // Push the boxValues array to the boardValues array
-                boardValues.push(boxValues);
-            });*/
-
             //Get boxes by id
             var boxes = [];
             for (var i = 1; i < 10; i++) {
@@ -428,40 +1918,27 @@
 
         // Function to initialize the Sudoku board with values from a 2D array
         function initializeBoard(gameBoard) {
-            //Using the row, colum, and box indexes, convert the 2d array into a 1d array
-            var values = [];
-            for(var box = 0; box < 9; box++){
-                for(var col = 0; col < 3; col++){
-                    for(var row = 0; row < 3; row++){                
-                        value = gameBoard[(3 * Math.floor(box / 3)) + row][(3 * (box % 3)) + col]
+            pageBoard = []
 
-                        if(value == "*")
-                            value = ""
+            for(x = 0; x < 9; x++){
+                row = []
 
-                        values.push(value);
-                    }
+                for(y = 0; y < 9; y++){
+                    row.push(getCellFromCoordinates(x, y))
                 }
 
+                pageBoard.push(row)
             }
 
-            //Get boxes by id
-            var boxes = [];
-            for (var i = 1; i < 10; i++) {
-                boxes.push(document.getElementById("box-" + String(i))); // Corrected toString to String
+            for(x = 0; x < 9; x++){
+                for(y = 0; y < 9; y++){
+                    cell = pageBoard[x][y]
+                    cell.innerHTML = `<div>${Math.max(x, y)}</div>`;; 
+                    cell.classList.remove('poss-cell');
+                    cell.classList.add('cell-val');    
+                }
             }
 
-            //Set 1D Array of values to board
-            valueIndex = 0;
-            boxes.forEach(box => {
-                var columns = box.querySelectorAll('.box-colum');
-                columns.forEach(column => {
-                    var cells = column.querySelectorAll('.cell');
-                    cells.forEach(cell => {
-                        cell.value = values[valueIndex];
-                        valueIndex++;
-                    });
-                });
-            });
         }
 
         // Example 2D array representing a Sudoku board
