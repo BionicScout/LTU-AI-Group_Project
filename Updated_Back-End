@@ -1,0 +1,1183 @@
+pip install Flask
+
+
+pip install flask-cors
+
+
+### IMPORTS ###
+import numpy as np
+import os
+import json
+
+
+### CLASSES ###
+class Occurrence:
+    # The init() sets the initial counter and positions for later use.
+    def __init__(self):
+        self.counter = 0
+       
+        # The positions variable is needed for the Hidden Pairs function.
+        self.positions = [(0, 0) for x in range(3)]
+       
+    def increment(self):
+        self.counter += 1
+       
+    def get_counter(self):
+        return self.counter
+   
+    # set_position() sets the candidate's board position (row, col) in the Occurence.
+    def set_position(self, pos_num, row, col):
+        self.positions[pos_num-1] = (row, col)
+   
+    def get_position(self, pos_num):
+        return self.positions[pos_num-1]
+   
+    def list_positions(self):
+        return self.positions
+
+
+class Cell:
+    def __init__(self, input_val):
+        self.value = 0
+        if(input_val != '*'):
+            self.value = int(input_val)
+#ZQ - Begin
+            self.candidate = [] # cell is already solved, so no candidates
+        else:
+            self.candidate = [1, 2, 3, 4, 5, 6, 7, 8, 9]  # value is not provided,
+                                                          # all numbers are candidates at the beginning
+#ZQ - End
+
+
+#ZQ - Begin
+    # Sets the cell's value and clear the candidates
+    def set(self, value):
+        self.value = value
+        self.candidate.clear()
+
+
+    # Returns the cell's value
+    def get(self):
+        return self.value
+
+
+    def is_empty(self):
+        return self.value == 0 or self.value == '*'
+
+
+    # return true if specified element is in the candidates list
+    def contains(self, elem):
+        return self.candidate.count(elem) != 0
+
+
+    # adds the specified element to the candidates list
+    def add(self, elem):
+        if not self.contains(elem):
+            self.candidate.append(elem)
+
+
+    # removes the specified element from candidates list
+    def delete(self, elem):
+        if self.contains(elem):
+            self.candidate.remove(elem)
+
+
+    # returns the candidates list
+    def list(self):
+        return self.candidate
+
+
+    # returns the number of elements in the candidates list
+    def count(self):
+        return len(self.candidate)
+#ZQ - End
+
+
+
+
+class Board:
+    def __init__(self, file_name):
+        # Get Boards folder
+        current_directory = os.getcwd() #Current working directory
+        parent_directory = os.path.dirname(current_directory)
+        new_folder_path = os.path.join(parent_directory, 'Unsolved-Boards')
+        text_file_path = os.path.join(new_folder_path, file_name)
+
+
+        # Check if the folder exists, if not, create it
+        if not os.path.exists(text_file_path):
+            print("ERROR - the path " + text_file_path + " does not exist")
+            return None
+
+
+       
+        # Read File
+        fileReader = open(text_file_path, "r")    
+        file_as_text = fileReader.read()
+        text_to_array = file_as_text.split('\n')
+        text_to_array = np.array([[tile for tile in row] for row in text_to_array if len(row) > 0])
+        #print(text_to_array)
+       
+       
+        # Turn File into Board object
+        self.board = []
+       
+        for row in text_to_array:
+            row_list = []
+            for element in row:
+                row_list.append(Cell(element))
+               
+            self.board.append(row_list)
+           
+#ZQ - Begin
+        if self.board != []:
+            for i in range(9):
+                for j in range(9):
+                    if str(self.board[i][j].get()) != '*' and self.board[i][j].get() > 0:
+                        self._set(i, j, self.board[i][j].get()) #inserts the value in the board
+
+
+#ZQ - End
+
+
+           
+    def set_json(self, json_data, val):
+        self.board = []
+       
+        for row in text_to_array:
+            row_list = []
+            for element in row:
+                row_list.append(Cell(element))
+               
+            self.board.append(row_list)
+           
+    def updateToSolved(self, gameBoard):
+        self.board = []
+       
+        for row in gameBoard:
+            row_list = []
+            for element in row:
+                row_list.append(Cell(element))
+               
+            self.board.append(row_list)
+       
+    def print_board(self):
+        for i, row in enumerate(self.board):
+           
+            if i % 3 == 0 and i != 0:
+                print("-" * 7 + "+" + "-" * 7 + "+" + "-" * 7)  # Print horizontal line after every 3 rows
+
+
+            print(" ", end="")
+            for j, cell in enumerate(row):
+                if j % 3 == 0 and j != 0:
+                    print("| ", end="")  # Print vertical line after every 3 cells
+
+
+                if cell.value == 0:
+                    print("*", end=" ")
+                else:
+                    print(cell.value, end=" ")
+
+
+            print()  # Move to the next line after printing a row
+           
+    def toJSON(self):
+        json_data = {'board': []}
+        for row in self.board:
+            row_data = []
+            for cell in row:
+                row_data.append(cell.value)
+            json_data['board'].append(row_data)
+        return json.dumps(json_data)
+   
+    def copy(self):
+        newBoardList = []
+        for row in self.board:
+
+
+            row_list = []
+            for cell in row:
+                row_list.append(cell.value)
+
+
+            newBoardList.append(row_list)
+
+
+        return newBoardList  
+   
+#ZQ - Begin functions
+    # This function sets the specified value at the given positions.
+    # It also removes the value from all the units (row, column, box)            
+    def _set(self, cell_row, cell_col, value):
+        self.board[cell_row][cell_col].set(value) # calls Cell's function to update the value
+       
+        for col in range(9): # loops through the columns of the specified row
+            if self.board[cell_row][col].is_empty(): # call Cell's function to check if the cell is empty
+                self.board[cell_row][col].delete(value) # call Cell's function to remove value
+                                                        # from candidates list
+                       
+        for row in range(9): # loops through the rows of the specified column
+            if self.board[row][cell_col].is_empty():
+                self.board[row][cell_col].delete(value)
+       
+        for row in range((cell_row // 3) * 3, (cell_row // 3) * 3 + 3): # loops through the 3X3 box
+            for col in range((cell_col // 3) * 3, (cell_col // 3) * 3 + 3):
+                if self.board[row][col].is_empty():
+                    self.board[row][col].delete(value)
+                   
+    # returns true if board is full
+    def is_full(self):
+        for row in range(9):
+            for col in range(9):
+                if self.board[row][col].is_empty(): # calls Cell's function to check if cell is empty
+                    return False
+                   
+        return True
+
+
+    # prints candidates list of each cell in the board
+    def print_candidates(self):
+        for i in range(9):
+            print()
+           
+            for j in range(9):
+                print(f"{self.board[i][j].list()}, ", end ="")
+       
+        print()
+
+
+    # converts board's contents (values and candidates) into json
+    def toJSON_Full(self):
+        json_data = {'board': []}
+        for row in self.board:
+            row_data = []
+            for cell in row:
+                row_data.append(cell.value)
+                row_data.append(cell.list())
+               
+            json_data['board'].append(row_data)
+           
+        return json.dumps(json_data)
+
+
+    # implements hidden single solution strategy
+    def hidden_single(self, retries):
+        # retries until board is filled or max retries has exhausted
+        if self.is_full() or retries == 0:
+            return retries
+       
+        for row in range(9): # loops through each row of the board
+            occurrence = [Occurrence() for x in range(9)] # creates an empty Occurence
+           
+            for col in range(9): # loops through each column of the row
+                if self.board[row][col].is_empty():
+                    candidates = self.board[row][col].list() # call Cell's list function to get candidates
+               
+                    for elem in candidates: # loop through each candidate
+                        occurrence[elem-1].increment() # increments the counter at the candidate's pos
+                        occurrence[elem-1].set_position(1,row, col) #sets the cell pos in the Occurrence
+                       
+           
+            for x in range(9): # after marking is done, loop through each Occurence
+                #print(occurrence[x].get_counter())
+                if occurrence[x].get_counter() == 1: # counter = 1 means hidden single
+                    (i_row, i_col) = occurrence[x].get_position(1) # get cell position
+                    self._set(i_row, i_col, x + 1) # sets the cell's value to the hidden single candidate
+                   
+        for col in range(9): # loop through columns
+            occurrence = [Occurrence() for x in range(9)]
+           
+            for row in range(9): # loop through each row of the column
+                if self.board[row][col].is_empty():
+                    candidates = self.board[row][col].list()
+                   
+                    for elem in candidates:
+                        occurrence[elem - 1].increment()
+                        occurrence[elem - 1].set_position(1,row, col)
+           
+            for x in range(9):
+                if occurrence[x].get_counter() == 1:
+                    (i_row, i_col) = occurrence[x].get_position(1)
+                    self._set(i_row, i_col, x + 1) #sets the cell's value to the hidden single candidate
+                   
+        for box_row in range(0, 9, 3): # loop through each of the 9 boxes
+            for box_col in range(0, 9, 3):
+                occurrence = [Occurrence() for x in range(9)]
+           
+                for row in range(box_row, box_row + 3): # loop through each cell of 3X3 box
+                    for col in range(box_col, box_col + 3):
+                        if self.board[row][col].is_empty():
+                            candidates = self.board[row][col].list()
+               
+                            for elem in candidates:
+                                occurrence[elem - 1].increment()
+                                occurrence[elem - 1].set_position(1,row, col)
+                               
+                for x in range(9):
+                    if occurrence[x].get_counter() == 1:
+                        (i_row, i_col) = occurrence[x].get_position(1)
+                        self._set(i_row, i_col, x + 1)
+                       
+        return self.hidden_single(retries - 1)
+
+
+    # implements hidden pair solution strategy
+    def hidden_pair(self):
+        hits = 0
+       
+        for row in range(9): # loop through the rows
+            occurrence = [Occurrence() for x in range(9)]
+           
+            for col in range(9): # loop through each column of the row
+                if self.board[row][col].is_empty():
+                    candidates = self.board[row][col].list() # get candidates list for the cell
+               
+                    for elem in candidates:
+                        occurrence[elem-1].increment() # increment candidate's counter
+                       
+                        cell_num = occurrence[elem-1].get_counter()
+                       
+                        if cell_num <= 2:
+                            occurrence[elem-1].set_position(cell_num, row, col) # save cells' position (upto 2)
+           
+            for x in range(8): # loop through the Occurence
+                x_count = occurrence[x].get_counter()
+                x_pos1 = occurrence[x].get_position(1)
+                x_pos2 = occurrence[x].get_position(2)
+               
+                if x_count == 2 : # if it's candidate for hidden pair
+                    for y in range(x + 1, 9): # to find the pair
+                        y_count = occurrence[y].get_counter()
+                        y_pos1 = occurrence[y].get_position(1)
+                        y_pos2 = occurrence[y].get_position(2)
+                       
+                        if y_count == 2 and \
+                            x_pos1 == y_pos1 and \
+                            x_pos2 == y_pos2: # a pair is found
+                           
+                            hits += 1
+                           
+                            (i_row, i_col) = x_pos1 # first cell
+                            self.board[i_row][i_col].set(0) # clearing out the candidates list
+                            self.board[i_row][i_col].add(x + 1) # add first candidate
+                            self.board[i_row][i_col].add(y + 1) # add second candidate
+                           
+                            (i_row, i_col) = x_pos2 # second cell
+                            self.board[i_row][i_col].set(0)
+                            self.board[i_row][i_col].add(x + 1)
+                            self.board[i_row][i_col].add(y + 1)
+                               
+        for col in range(9): # loop through the columns
+            occurrence = [Occurrence() for x in range(9)]
+           
+            for row in range(9): # loop through each row of the column
+                if self.board[row][col].is_empty():
+                    candidates = self.board[row][col].list()
+               
+                    for elem in candidates:
+                        occurrence[elem-1].increment()
+                       
+                        cell_num = occurrence[elem-1].get_counter()
+                       
+                        if cell_num <= 2:
+                            occurrence[elem-1].set_position(cell_num, row, col) # record positions
+           
+            for x in range(8):
+                x_count = occurrence[x].get_counter()
+                x_pos1 = occurrence[x].get_position(1)
+                x_pos2 = occurrence[x].get_position(2)
+               
+                if x_count == 2 :
+                    for y in range(x + 1, 9):
+                        y_count = occurrence[y].get_counter()
+                        y_pos1 = occurrence[y].get_position(1)
+                        y_pos2 = occurrence[y].get_position(2)
+                       
+                        if y_count == 2 and \
+                            x_pos1 == y_pos1 and \
+                            x_pos2 == y_pos2:
+                           
+                            hits += 1
+                           
+                            (i_row, i_col) = x_pos1
+                            self.board[i_row][i_col].set(0)
+                            self.board[i_row][i_col].add(x + 1)
+                            self.board[i_row][i_col].add(y + 1)
+                           
+                            (i_row, i_col) = x_pos2
+                            self.board[i_row][i_col].set(0)
+                            self.board[i_row][i_col].add(x + 1)
+                            self.board[i_row][i_col].add(y + 1)
+       
+        for box_row in range(0, 9, 3): # loop throgh the 9 boxes
+            for box_col in range(0, 9, 3):
+                occurrence = [Occurrence() for x in range(9)]
+           
+                for row in range(box_row, box_row + 3): # loop through the rows of the 3X3 box
+                    for col in range(box_col, box_col + 3): # loop through the columns of the 3X3 box
+                        if self.board[row][col].is_empty():
+                            candidates = self.board[row][col].list()
+
+
+                            for elem in candidates:
+                                occurrence[elem-1].increment()
+                       
+                                cell_num = occurrence[elem-1].get_counter()
+                       
+                                if cell_num <= 2:
+                                    occurrence[elem-1].set_position(cell_num, row, col)
+           
+                for x in range(8):
+                    x_count = occurrence[x].get_counter()
+                    x_pos1 = occurrence[x].get_position(1)
+                    x_pos2 = occurrence[x].get_position(2)
+               
+                    if x_count == 2 :
+                        for y in range(x + 1, 9):
+                            y_count = occurrence[y].get_counter()
+                            y_pos1 = occurrence[y].get_position(1)
+                            y_pos2 = occurrence[y].get_position(2)
+                       
+                            if y_count == 2 and \
+                                x_pos1 == y_pos1 and \
+                                x_pos2 == y_pos2:
+                               
+                                hits += 1
+                           
+                                (i_row, i_col) = x_pos1
+                                self.board[i_row][i_col].set(0)
+                                self.board[i_row][i_col].add(x + 1)
+                                self.board[i_row][i_col].add(y + 1)
+                           
+                                (i_row, i_col) = x_pos2
+                                self.board[i_row][i_col].set(0)
+                                self.board[i_row][i_col].add(x + 1)
+                                self.board[i_row][i_col].add(y + 1)
+                               
+        return hits // 2 # divide by 2 since we get 2 hits for each candidate
+   
+    # implements hidden triple solution strategy
+    # this funciton is similar to hidden_pair except that it looks for group of three candidates
+    def hidden_triple(self):
+        hits=0
+       
+        for row in range(9):
+            occurrence = [Occurrence() for x in range(9)]
+           
+            for col in range(9):
+                if self.board[row][col].is_empty():
+                    candidates = self.board[row][col].list()
+               
+                    for elem in candidates:
+                        occurrence[elem-1].increment()
+                       
+                        cell_num = occurrence[elem-1].get_counter()
+                       
+                        if cell_num <= 3:
+                            occurrence[elem-1].set_position(cell_num, row, col)
+           
+            for x in range(7):
+                x_count = occurrence[x].get_counter()
+                x_pos1 = occurrence[x].get_position(1)
+                x_pos2 = occurrence[x].get_position(2)
+                x_pos3 = occurrence[x].get_position(3)
+               
+                if x_count == 3:
+                    for y in range(x + 1, 9):
+                        y_count = occurrence[y].get_counter()
+                        y_pos1 = occurrence[y].get_position(1)
+                        y_pos2 = occurrence[y].get_position(2)
+                        y_pos3 = occurrence[y].get_position(3)
+                       
+                        if y_count == 3 and \
+                            x_pos1 == y_pos1 and \
+                            x_pos2 == y_pos2 and \
+                            x_pos3 == y_pos3:
+                           
+                            for z in range(y + 1, 9):
+                                z_count = occurrence[z].get_counter()
+                                z_pos1 = occurrence[z].get_position(1)
+                                z_pos2 = occurrence[z].get_position(2)
+                                z_pos3 = occurrence[z].get_position(3)
+                               
+                                if z_count == 3 and \
+                                    y_pos1 == z_pos1 \
+                                    and y_pos2 == z_pos2 and \
+                                    y_pos3 == z_pos3:
+                                   
+                                    hits += 1
+                                   
+                                    (i_row, i_col) = x_pos1
+                                    self.board[i_row][i_col].set(0)
+                                    self.board[i_row][i_col].add(x + 1)
+                                    self.board[i_row][i_col].add(y + 1)
+                                    self.board[i_row][i_col].add(z + 1)
+                                   
+                                    (i_row, i_col) = x_pos2
+                                    self.board[i_row][i_col].set(0)
+                                    self.board[i_row][i_col].add(x + 1)
+                                    self.board[i_row][i_col].add(y + 1)
+                                    self.board[i_row][i_col].add(z + 1)
+
+
+                                    (i_row, i_col) = x_pos3
+                                    self.board[i_row][i_col].set(0)
+                                    self.board[i_row][i_col].add(x + 1)
+                                    self.board[i_row][i_col].add(y + 1)
+                                    self.board[i_row][i_col].add(z + 1)
+                               
+        for col in range(9):
+            occurrence = [Occurrence() for x in range(9)]
+           
+            for row in range(9):
+                if self.board[row][col].is_empty():
+                    candidates = self.board[row][col].list()
+               
+                    for elem in candidates:
+                        occurrence[elem-1].increment()
+                       
+                        cell_num = occurrence[elem-1].get_counter()
+                       
+                        if cell_num <= 3:
+                            occurrence[elem-1].set_position(cell_num, row, col)
+           
+            for x in range(7):
+                x_count = occurrence[x].get_counter()
+                x_pos1 = occurrence[x].get_position(1)
+                x_pos2 = occurrence[x].get_position(2)
+                x_pos3 = occurrence[x].get_position(3)
+               
+                if x_count == 3:
+                    for y in range(x + 1, 9):
+                        y_count = occurrence[y].get_counter()
+                        y_pos1 = occurrence[y].get_position(1)
+                        y_pos2 = occurrence[y].get_position(2)
+                        y_pos3 = occurrence[y].get_position(3)
+                       
+                        if y_count == 3 and \
+                            x_pos1 == y_pos1 and \
+                            x_pos2 == y_pos2 and \
+                            x_pos3 == y_pos3:
+                           
+                            for z in range(y + 1, 9):
+                                z_count = occurrence[z].get_counter()
+                                z_pos1 = occurrence[z].get_position(1)
+                                z_pos2 = occurrence[z].get_position(2)
+                                z_pos3 = occurrence[z].get_position(3)
+                               
+                                if z_count == 3 and \
+                                    y_pos1 == z_pos1 and \
+                                    y_pos2 == z_pos2 and \
+                                    y_pos3 == z_pos3:
+                                   
+                                    hits += 1
+                                   
+                                    (i_row, i_col) = x_pos1
+                                    self.board[i_row][i_col].set(0)
+                                    self.board[i_row][i_col].add(x + 1)
+                                    self.board[i_row][i_col].add(y + 1)
+                                    self.board[i_row][i_col].add(z + 1)
+                                   
+                                    (i_row, i_col) = x_pos2
+                                    self.board[i_row][i_col].set(0)
+                                    self.board[i_row][i_col].add(x + 1)
+                                    self.board[i_row][i_col].add(y + 1)
+                                    self.board[i_row][i_col].add(z + 1)
+
+
+                                    (i_row, i_col) = x_pos3
+                                    self.board[i_row][i_col].set(0)
+                                    self.board[i_row][i_col].add(x + 1)
+                                    self.board[i_row][i_col].add(y + 1)
+                                    self.board[i_row][i_col].add(z + 1)
+                                   
+        for box_row in range(0, 9, 3):
+            for box_col in range(0, 9, 3):
+                occurrence = [Occurrence() for x in range(9)]
+           
+                for row in range(box_row, box_row + 3):
+                    for col in range(box_col, box_col + 3):
+                        if self.board[row][col].is_empty():
+                            candidates = self.board[row][col].list()
+
+
+                            for elem in candidates:
+                                occurrence[elem-1].increment()
+                       
+                                cell_num = occurrence[elem-1].get_counter()
+                       
+                                if cell_num <= 2:
+                                    occurrence[elem-1].set_position(cell_num, row, col)
+           
+                for x in range(7):
+                    x_count = occurrence[x].get_counter()
+                    x_pos1 = occurrence[x].get_position(1)
+                    x_pos2 = occurrence[x].get_position(2)
+                    x_pos3 = occurrence[x].get_position(3)
+               
+                    if x_count == 3:
+                        for y in range(x + 1, 9):
+                            y_count = occurrence[y].get_counter()
+                            y_pos1 = occurrence[y].get_position(1)
+                            y_pos2 = occurrence[y].get_position(2)
+                            y_pos3 = occurrence[y].get_position(3)
+                       
+                            if y_count == 3 and \
+                                x_pos1 == y_pos1 and \
+                                x_pos2 == y_pos2 and \
+                                x_pos3 == y_pos3:
+                               
+                                for z in range(y + 1, 9):
+                                    z_count = occurrence[z].get_counter()
+                                    z_pos1 = occurrence[z].get_position(1)
+                                    z_pos2 = occurrence[z].get_position(2)
+                                    z_pos3 = occurrence[z].get_position(3)
+                               
+                                    if z_count == 3 and \
+                                        y_pos1 == z_pos1 and \
+                                        y_pos2 == z_pos2 and \
+                                        y_pos3 == z_pos3:
+                                       
+                                        hits += 1
+                                   
+                                        (i_row, i_col) = x_pos1
+                                        self.board[i_row][i_col].set(0)
+                                        self.board[i_row][i_col].add(x + 1)
+                                        self.board[i_row][i_col].add(y + 1)
+                                        self.board[i_row][i_col].add(z + 1)
+                                   
+                                        (i_row, i_col) = x_pos2
+                                        self.board[i_row][i_col].set(0)
+                                        self.board[i_row][i_col].add(x + 1)
+                                        self.board[i_row][i_col].add(y + 1)
+                                        self.board[i_row][i_col].add(z + 1)
+
+
+                                        (i_row, i_col) = x_pos3
+                                        self.board[i_row][i_col].set(0)
+                                        self.board[i_row][i_col].add(x + 1)
+                                        self.board[i_row][i_col].add(y + 1)
+                                        self.board[i_row][i_col].add(z + 1)
+                                       
+        return hits // 3
+   
+    # implements naked single solution strategy
+    def naked_single(self):
+        hits = 0
+       
+        for row in range(9):
+            for col in range(9):
+                if self.board[row][col].count() == 1: # cell with a single candidate
+                   
+                    hits += 1
+                   
+                    value = self.board[row][col].list()[0]
+                   
+                    self._set(row, col, value) # sets the cell's value to the single candidate
+                   
+        for col in range(9):
+            for row in range(9):
+                if self.board[row][col].count() == 1:
+                   
+                    hits += 1
+                   
+                    value = self.board[row][col].list()[0]
+                   
+                    self._set(row, col, value)
+
+
+        return hits
+
+
+    # implements naked pair solution strategy
+    def naked_pair(self):
+        hits = 0
+       
+        for row in range(9): # scan by rows
+            for i_col in range(8):
+                if self.board[row][i_col].count() == 2:
+                    i_values = self.board[row][i_col].list()
+                   
+                    for j_col in range(i_col + 1, 9):
+                        j_values = self.board[row][j_col].list()
+                       
+                        if self.board[row][j_col].count() == 2 and \
+                            i_values == j_values: # if a pair is found in the specified row
+                           
+                            hits += 1
+                           
+                            self._clear_row(row, i_col, j_col, i_values) # remove these two candidates from
+                                                                         # other cells of the row
+                           
+                            if i_col // 3 == j_col // 3: # if the cells belong to the same box
+                                self._clear_box(row, i_col, row, j_col, i_values) # remove these two candidates
+                                                                                  # from other cells of the box
+
+
+        for col in range(9): # scan by columns
+            for i_row in range(8):
+                if self.board[i_row][col].count() == 2:
+                    i_values = self.board[i_row][col].list()
+                   
+                    for j_row in range(i_row + 1, 9):
+                        j_values = self.board[j_row][col].list()
+                       
+                        if self.board[j_row][col].count() == 2 and \
+                            i_values == j_values: # a pair is found
+                           
+                            hits += 1
+                           
+                            self._clear_col(i_row, j_row, col, i_values) # remove the two candidates from the
+                                                                         # other cells of the column
+                           
+                            if i_row // 3 == j_row // 3: # if the two cells belong to the same box
+                                self._clear_box(i_row, col, j_row, col, i_values)
+           
+     
+        for box_row in range(0, 9, 3): # scan through each of the 9 boxes
+            for box_col in range(0, 9, 3):
+                for i_row in range(box_row, box_row + 3): # scan through cells of each 3X3 box
+                    for i_col in range(box_col, box_col + 3):
+                        if self.board[i_row][i_col].count() == 2:
+                            i_values = self.board[i_row][i_col].list()
+                           
+                            for j_row in range(box_row, box_row + 3):
+                                for j_col in range(box_col, box_col + 3):
+                                    j_values = self.board[j_row][j_col].list()
+                                   
+                                    if j_row != i_row and \
+                                        j_col != i_col and \
+                                        self.board[j_row][j_col].count() == 2 and \
+                                        i_values == j_values: # a naked pair is found
+                                       
+                                        hits += 1
+                                       
+                                        # remove the two candidates from other cells of the box
+                                        self._clear_box(i_row, i_col, j_row, j_col, i_values)
+                                       
+                                        # remove the two candidates from the other cells of the row if
+                                        # they belong to the same row
+                                        if i_row == j_row:
+                                            self._clear_row(i_row, i_col, j_col, i_values)
+                                           
+                                        # remove the two candidates from the other cells of the column if
+                                        # they belong to the same column
+                                        if i_col == j_col:
+                                            self._clear_col(i_row, j_row, i_col, i_values)
+               
+        return hits
+
+
+    # clears the candidate from other cells of the row
+    def _clear_row(self, row, col1, col2, values):
+        for col in range(9):
+            if col != col1 and \
+                col != col2 and \
+                self.board[row][col].is_empty():
+               
+                for value in values:
+                    self.board[row][col].delete(value)
+
+
+    # clears the candidate from other cells of the column
+    def _clear_col(self, row1, row2, col, values):
+        for row in range(9):
+            if row != row1 and \
+                row != row2 and \
+                self.board[row][col].is_empty():    
+               
+                for value in values:
+                    self.board[row][col].delete(value)
+
+
+    # clears the candidate from other cells of the box
+    def _clear_box(self, row1, col1, row2, col2, values):
+        for row in range(row1 // 3 * 3, row1 // 3 * 3 + 3):
+            for col in range(col1 // 3 * 3, col1 // 3 * 3 + 3):
+                if (row, col) != (row1, col1) and \
+                    (row, col) != (row2, col2) and \
+                    self.board[row][col].is_empty():
+                       
+                        for value in values:
+                            self.board[row][col].delete(value)
+   
+   
+#ZQ - End functions
+
+
+
+
+### BACK TRACKING ALGORTHM ###
+
+
+#Creating the Constraint Satisfaction Problem variable:
+sudoku_csp = {
+    #The variable item contains a list of the cells of the Sudoku Board
+    'variables': [(i, j) for i in range(9) for j in range(9)],
+   
+    #The domain item contains a dictionary of each variable containing a list of numbers from 1 to 9
+    'domains': {variable: list(range(1, 10)) for variable in [(i, j) for i in range(9) for j in range(9)]},
+   
+    #The constraint item contains a dictionary of each constraint type
+    #Each constraint holds a lambda function for checking if a given value violates the constraint or not
+    'constraints': {
+        'row': lambda board, row, col, num: num not in board[row],
+        'column': lambda board, row, col, num: num not in [board[i][col] for i in range(9)],
+        'subgrid': lambda board, row, col, num: all(num != board[i][j] for i in range(3*(row//3), 3*(row//3) + 3) for j in range(3*(col//3), 3*(col//3) + 3))
+    }
+}
+
+
+#The class for solving the Puzzle
+def solve_sudoku_csp(board, csp):
+   
+    count = [0]
+   
+    #Creating variables holding the different components of the CSP variable
+    variables = csp['variables']
+    domains = csp['domains']
+    constraints = csp['constraints']
+   
+    #Creating a dictionary to store the assigned cells
+    assigned_cells = {}  
+   
+    #the backtracking function
+    def backtrack(board, count):
+        #nonlocal count
+        count[0] += 1
+       
+        #Calls the function to find an unassigned cell
+        empty_cell = find_empty_cell(board)
+       
+        #if the empty cell returns None, the board is solved
+        if not empty_cell:
+            return True
+       
+        #set the row and column of the empty cell
+        row, col = empty_cell
+       
+        #go through each value in the domain of the empty cell to find the correct value
+        for num in domains[empty_cell]:
+           
+            #if the current value does not violate any constraint, assign the value to the empty cell
+            if is_valid(board, row, col, num, constraints):
+                board[row][col] = num
+               
+                #Record the assigned cell
+                assigned_cells[(row, col)] = num
+               
+                #call the backtracking function for another empty cell
+                #if there are no more empty cells, return true
+                if backtrack(board, count):
+                    return True
+                #Backtrack and remove the cell
+                board[row][col] = 0  
+                del assigned_cells[(row, col)]
+               
+        #No solution found
+        return False
+   
+    #the function to find an empty cell
+    def find_empty_cell(board):
+       
+        #Go through each row and column to find a cell that contains 0
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] == 0:
+                    return (i, j)
+        return None
+   
+    #the function to check the board's consistency with the constraints
+    def is_valid(board, row, col, num, constraints):
+       
+        #looping to go through each constraint and using the function inside to test for consistency
+        for constraint_type, constraint_func in constraints.items():
+           
+            #if the function does not return true, then it is not consistent
+            if not constraint_func(board, row, col, num):
+                return False
+        return True
+   
+    #call the solving solutions file to apply the solving strategies before using the backtracking function
+
+
+    #import sys
+    #sys.path.append('C:\\Users\\zqasmi\\1ArtificialIntelligence\\Team Project\\LTU-AI-Group_Project-main\\LTU-AI-Group_Project-main')
+
+
+    #import "Solving Strategies.ipynb"
+
+
+    #%run "Solving Strategies.ipynb"
+   
+    # In Main_App.ipynb after running %run
+    #board = main(board)
+
+
+    #if the backtracking function returns true, return the board
+    if backtrack(board, count):
+        return True, board, assigned_cells, count[0]  # Return assigned cells along with the solution
+    else:
+        return False, None, None, count[0]
+
+
+### COMBINED SOLVING AND BACKTRACKING STRATEGIES ###
+def solveBoard(boardName):
+    print("----------- " + boardName + " -----------")
+   
+    #Get Copy of Unsolved Board
+    gameBoard = Board(boardName)
+   
+    unsolvedBoard = gameBoard.copy()
+   
+    print("\nGame Board\n")
+    gameBoard.print_board()
+    print('\n')
+
+
+#ZQ - Test - Start
+    print("candidates")
+    gameBoard.print_candidates()
+   
+    print("Run hidden_single()")
+    print(f"hidden_single() {gameBoard.hidden_single(2)}")
+
+
+    #gameBoard.print_board()
+    #gameBoard.print_candidates()
+
+
+   
+    #print("Run hidden_pair()")
+    #gameBoard.hidden_pair()
+
+
+    #gameBoard.print_board()
+    #gameBoard.print_candidates()
+   
+    #print("Run hidden_triple()")
+    #gameBoard.hidden_triple()
+
+
+    #gameBoard.print_board()
+    #gameBoard.print_candidates()
+   
+    #print("Run naked_single()")
+    #gameBoard.naked_single()
+
+
+    #gameBoard.print_board()
+    #gameBoard.print_candidates()
+
+
+    #print("Run naked_pair()")
+    #gameBoard.naked_pair()
+   
+    gameBoard.print_board()
+    gameBoard.print_candidates()
+    print('\n')
+   
+    unsolvedBoard = gameBoard.copy()
+#ZQ - Test - End
+    #For checking the time it takes for the program to solve the board.
+    #%timeit -n1 -r1 display(solve_sudoku_csp(unsolvedBoard, sudoku_csp))
+     
+   
+    #Solve
+    solved, solution, assignments, count = solve_sudoku_csp(unsolvedBoard, sudoku_csp)  
+    gameBoard.updateToSolved(solution)
+   
+    #Shows the board if it is solved
+    if solved:
+        print("Sudoku Solved Successfully!\n")
+        gameBoard.print_board()
+        print(f"\nThe number of times the backtracking algorithm was called: {count}.")
+           
+        return solved, gameBoard, assignments
+    else:
+        print("No solution exists!")
+        return solved, None, None
+       
+
+
+### Testing ###
+gameBoards = ["Puzzle_1.txt", "Puzzle_2.txt", "Puzzle_3.txt", "Puzzle_4.txt", "Puzzle_5.txt"]
+for game in gameBoards:
+    solveBoard(game)
+    print('\n\n\n')
+
+
+### FRONT END CONNECTION ###
+from flask import Flask, jsonify, request, send_from_directory
+from flask_cors import CORS
+import pandas as pd
+
+
+### FRONT END TESTING ###
+def create_json2():
+    updates = [
+        {
+            "solve_type": "Solved cells",
+            "eliminations": [{"x": 4, "y": 5, "values": [5]}],
+            "found_value": 5,
+            "group": None
+        },
+        {
+            "solve_type": "Naked Single",
+            "group": [{"x": 3, "y": 4, "values": [1, 2, 3, 5, 8]}],
+            "eliminations": [{"x": 5, "y": 4, "values": [1, 9]}],
+            "found_value": None
+        },
+        {
+            "solve_type": "Hidden Single",
+            "group": [{"x": 1, "y": 7, "values": [2, 3, 5, 6, 9]}],
+            "eliminations": [{"x": 1, "y": 7, "values": [2, 6, 9]}],
+            "found_value": {"x": 1, "y": 7, "value": 8}
+        },
+        {
+            "solve_type": "Naked Pair",
+            "group": [
+                {"x": 2, "y": 6, "values": [2, 5]},
+                {"x": 2, "y": 8, "values": [2, 5]}
+            ],
+            "eliminations": [
+                {"x": 2, "y": 3, "values": [2, 5]},
+                {"x": 2, "y": 5, "values": [2, 5]}
+            ],
+            "found_value": None
+        }
+    ]
+   
+    json_data = {"updates": updates}
+    return json.dumps(json_data, indent=2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def create_json(gameBoard, addedVals):
+    added_json = addedValsToJson(addedVals)
+    finalBoard_json = combine_json(gameBoard.toJSON(), added_json, 3)
+   
+    send_json = combine_json(create_json2(), finalBoard_json, 4)
+    print(send_json)
+   
+    return send_json
+
+
+def addedValsToJson(addedVals):
+    added = [
+       
+    ]
+   
+    for coord, val in addedVals.items():
+        added_val = {"val": val, "coord": coord}
+        added.append(added_val)
+   
+    json_data = {"added": added}
+    return json.dumps(json_data, indent=2)
+
+
+
+
+def combine_json(json_1, json_2, indentSize):
+    # Parse JSON strings into dictionaries
+    data_1 = json.loads(json_1)
+    data_2 = json.loads(json_2)
+   
+    # Combine the data
+    combined_data = {**data_1, **data_2}
+   
+    # Convert combined data back to JSON string
+    combined_json = json.dumps(combined_data, indent=indentSize)
+   
+    return combined_json
+
+
+app = Flask(__name__)
+CORS(app)
+
+
+# Define the route to serve HTML files from a folder
+@app.route('/Front-End/<path:path>')
+def serve_html(path):
+    print("--- Html Page ---")
+    current_directory = os.getcwd()  # Current working directory
+    parent_directory = os.path.dirname(current_directory)
+    frontEnd_dir = os.path.join(parent_directory, 'Front-End')
+
+
+    print(frontEnd_dir + '/' + path)
+    return send_from_directory(frontEnd_dir, path)
+
+
+@app.route('/load', methods=['POST'])
+def load():
+    print('--- Loading ---')
+   
+    # Retrieve the file name from the request data or URL parameters
+    requestData = request.get_json()
+    fileName = requestData.get('fileName') # Assuming the file name is sent in a form field
+    print(fileName)
+
+
+    # Process the request to load data from the file (e.g., using Board(fileName))
+    temp = Board(fileName)
+    if(temp == None):
+        return jsonify({'error': f'{fileName} Not Found'}), 404
+   
+    return temp.toJSON()
+
+
+
+
+@app.route('/customBoard', methods=['POST'])
+def customBoard():
+    print("--- Custom Board ---")
+    # Get the JSON data from the request
+    #request_data = request.get_json()
+
+
+    # Extract the file name and sudoku board data from the JSON data
+    #board = Board("none")
+    #board.set_json(request_data.get('sudokuBoard'))
+
+
+    # Process the POST request and return JSON response
+    result = create_json2()
+    return jsonify(result)
+
+
+
+
+@app.route('/solve', methods=['POST'])
+def solve():
+    print('--- Solving ---')
+   
+    solved, gameBoard, addedVals = solveBoard("Puzzle_1.txt")
+    return jsonify(create_json(gameBoard, addedVals))
+   
+    #print(create_json(gameBoard, addedVals))
+   
+    if(solved):
+        print('Solved')
+        result = create_json2()
+        return jsonify(create_json(gameBoard, addedVals))
+   
+    print('Not Solved')
+    result = create_json2()
+    return jsonify(result)
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=8080, use_reloader=False)
