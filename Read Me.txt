@@ -2,7 +2,7 @@ There are several steps to run our application.
 
 Steps:
 1) Open up Jupyter Nootbook
-2) In Jupyter Nootbook, go to the Back-End folder and open up <INSERT FILE NAME HERE>
+2) In Jupyter Nootbook, go to the Back-End folder and open up SudokuSolverApp.ipynb
 3) Run the file and wait for the flask server to start. It should have display a red box at the bottom of the page saying the server is up, (This may look like an error but it is not)
 4) Open up a web broswer and go to http://localhost:8080/Front-End/InputBoard.html
 
