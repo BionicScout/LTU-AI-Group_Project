@@ -1,0 +1,10 @@
+There are several steps to run our application.
+
+Steps:
+1) Open up Jupyter Nootbook
+2) In Jupyter Nootbook, go to the Back-End folder and open up <INSERT FILE NAME HERE>
+3) Run the file and wait for the flask server to start. It should have display a red box at the bottom of the page saying the server is up, (This may look like an error but it is not)
+4) Open up a web broswer and go to http://localhost:8080/Front-End/InputBoard.html
+
+From here the application should be running. 
+If you would like to look for the 5 file being tested, got into Jupyter and look for the function right above the server and json functions called solveBoard. At the bottom of the box, it runs through all 5 files and displays the results.  
