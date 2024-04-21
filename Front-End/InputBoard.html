@@ -14,6 +14,7 @@
 
         <!-- CSS -->
         <style>
+            /*----- Base Board ----- */
             .game-board{
                 background-color: #131a5f; 
 
@@ -21,6 +22,29 @@
                 padding: 5px; /* Optional: Add padding for visual appeal */
             }
 
+            .divider-vertical {
+                width: 3px; 
+                height: 150px;
+
+                background-color: #131a5f;
+            }
+
+            
+            .divider-horizontal {
+                width: 456px; 
+                height: 3px;
+
+                background-color: #131a5f;
+            }
+
+
+            /*----- Inner Board ----- */
+            .box-row
+            {
+                display: flex; /* Use flexbox */
+                justify-content: space-between; /* Distribute space between cells */
+            }
+            
             .cell {
                 /* Dimentions and Margins*/
                 width: 50px; 
@@ -42,41 +66,16 @@
                 color: #22bed8;
             }
 
-            .disabled {
-                background-color: #faf0ca;
 
-                color: black;
-            }
-
-            .box-row
-            {
-                display: flex; /* Use flexbox */
-                justify-content: space-between; /* Distribute space between cells */
-            }
-
-            .divider-vertical {
-                width: 3px; 
-                height: 150px;
-
-                background-color: #131a5f;
-            }
-
-            
-            .divider-horizontal {
-                width: 456px; 
-                height: 3px;
-
-                background-color: #131a5f;
-            }
-
+            /*----- Buttons ----- */
             #myButton {
                 /* Margins */
                 margin-top: 20px;
                 margin-left: 20px;
 
                 /* Colors */
-                background-color: #22bed8; /* Bright Blue */
-                color: #faf0ca; /* Back Yellow */
+                background-color: #22bed8; 
+                color: #faf0ca;
                 border: black 3px;
                 padding: 10px 20px;
                 border-radius: 5px;
@@ -84,8 +83,8 @@
             }
 
             #myButton:hover {
-                background-color: #131a5f; /* Dark Blue */
-                color: #faf0ca; /* Back Yellow */
+                background-color: #131a5f;
+                color: #faf0ca;
             }
 
         </style>
@@ -333,10 +332,36 @@
 
    <!-- JavaScript -->
    <script>
-        // Function to retrieve cell values and store them in a 2D array
+
+
+
+
+        /*******************************************
+            Buttons
+        *******************************************/
+
+        function handleClick() {
+            //Store Board and go to solve page
+            sessionStorage.clear();
+            sessionStorage.setItem('board', JSON.stringify(getBoardAs2DArray()));
+            console.log(getBoardAs2DArray())
+
+            window.location.assign("http://localhost:8080/Front-End/SolveBoard.html");
+        }
+
+        // Get the button element by its id
+        var button = document.getElementById("myButton");
+
+        // Add an event listener to the button to listen for clicks
+        button.addEventListener("click", handleClick);
+
+
+
+        /*******************************************
+            Board Functions
+        *******************************************/
         function getBoardAs2DArray() {
-            console.log("Hi");
-            //Get boxes by id
+            //Get boxes by id of each box
             var boxes = [];
             for (var i = 1; i < 10; i++) {
                 boxes.push(document.getElementById("box-" + String(i))); // Corrected toString to String
@@ -344,7 +369,7 @@
 
             console.log("Hi");
 
-            //Get 1D Array of values
+            //Get 1D Array of values from all boxes
             var values = [];
             boxes.forEach(box => {
                 var columns = box.querySelectorAll('.box-colum');
@@ -356,7 +381,6 @@
                 });
             });
             
-            console.log("Hi1");
             //Using the row, colum, and box indexes, convert the 1d array into a 2d array
             var gameBoard = [[], [], [], [], [], [], [], [], []]
             for(var box = 0; box < 9; box++){
@@ -377,31 +401,9 @@
 
             //Display Copied Board
             console.log(gameBoard);
-            console.log("Hi");
 
             // Return the 2D array containing cell values
             return gameBoard;
         }
-
-
-        function handleClick() {
-            sessionStorage.clear();
-            sessionStorage.setItem('board', JSON.stringify(getBoardAs2DArray()));
-            console.log(getBoardAs2DArray())
-
-            window.location.assign("http://localhost:8080/Front-End/SolveBoard.html");
-        }
-
-        // Get the button element by its id
-        var button = document.getElementById("myButton");
-
-        // Add an event listener to the button to listen for clicks
-        button.addEventListener("click", handleClick);
-
-
-        console.log(getBoardAs2DArray())
     </script>
-
-
-
 </html>

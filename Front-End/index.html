@@ -1,3 +1,5 @@
+<!-- THIS FILE HAS BEEN REMOVED FROM PROJECT DUE TO TIME RESTRICTIONS -->
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -6,128 +8,9 @@
         <title>Sample App</title>
     </head>
     <body>
-        <h1>Data Table</h1>
-        {% for table in tables %}
-            {{ table|safe }}
-        {% endfor %}
     </body>
 
     <script>
-        function solve(){
-            fetch('http://localhost:8080/solve', {
-                method: 'POST'
-            })
-            .then(response => {
-                // Parse the JSON response
-                return response.json();
-            })
-            .then(data => {
-                print(data)
-                info = JSON.parse(data);
-
-                console.log(info);
-
-                updatesQueue = solve_parseUpdate(info);
-                console.log(updatesQueue);
-
-                board = solve_parseBoard(info);
-                console.log(board);
-                
-                addedVals = solve_parseAddedVals(info);
-                console.log(addedVals);
-            })
-            .catch(error => console.error('Error: ', error));
-        }
-
-
-        function solve_parseUpdate(info){
-            // Initialize a queue to store updates
-            const updatesQueue = [];
-        
-            // Iterate over each update in the data
-            info.updates.forEach(update => {
-                // Extract relevant information from the update
-                const solveType = update.solve_type;
-                const eliminations = update.eliminations;
-                const foundValue = update.found_value;
-                const group = update.group;
-        
-                // Create an object to represent the update
-                const updateInfo = {
-                    solveType: solveType,
-                    eliminations: eliminations,
-                    foundValue: foundValue,
-                    group: group
-                };
-        
-                // Add the update to the queue
-                updatesQueue.push(updateInfo);
-            });
-        
-            // Now updatesQueue contains all updates split into individual objects
-            return updatesQueue
-        }
-
-        function solve_parseBoard(info){
-            // Initialize a queue to store updates
-            const board = [];
-        
-            // Iterate over each update in the data
-            info.board.forEach(rowInfo => {
-                const row = [];
-
-                rowInfo.forEach(val => {
-                    row.push(val);
-                })
-
-                // Add the update to the queue
-                board.push(row);
-            });
-        
-            // Now updatesQueue contains all updates split into individual objects
-            return board
-        }
-
-        function solve_parseAddedVals(info){
-            // Initialize a queue to store updates
-            const addedVals = [];
-            
-            // Iterate over each update in the data
-            info.added.forEach(valSet => {
-                // Extract relevant information from the update
-                const val = valSet.val;
-                const coord = valSet.coord;
-   
-        
-                // Create an object to represent the update
-                const parsedVal = {
-                    val: val,
-                    coord: coord
-                };
-        
-                // Add the update to the queue
-                addedVals.push(parsedVal);
-            });
-        
-            // Now updatesQueue contains all updates split into individual objects
-            return addedVals
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-        solve()
-
-
-
         /*
         var board = null;
 
@@ -152,33 +35,6 @@
             board = data;
         })
         .catch(error => console.error('Error: ', error));
-
-
-        fetch('http://localhost:8080/customBoard', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                sudokuBoard: [
-                    ['8', '2', '1', '*', '*', '*', '*', '*', '7'],
-                    ['*', '*', '*', '8', '*', '*', '*', '6', '*'],
-                    ['*', '6', '*', '9', '3', '*', '*', '*', '5'],
-                    ['*', '*', '8', '2', '*', '1', '6', '*', '*'],
-                    ['*', '*', '*', '7', '*', '*', '2', '8', '4'],
-                    ['2', '4', '*', '6', '*', '3', '7', '*', '*'],
-                    ['6', '*', '5', '*', '*', '*', '1', '*', '3'],
-                    ['*', '7', '*', '*', '5', '*', '*', '*', '*'],
-                    ['9', '1', '2', '*', '*', '*', '*', '6', '*']
-                ]
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => console.error('Error:', error));
-
         */
 
     </script>

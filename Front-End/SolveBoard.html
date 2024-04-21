@@ -14,16 +14,13 @@
 
         <!-- CSS -->
         <style>
-            .box-row
-            {
-                display: flex; /* Use flexbox */
-                justify-content: space-between; /* Distribute space between cells */
-            }
+            /*----- Base Board ----- */
+            .game-board{
+                background-color: #131a5f; 
 
-            .cell-row
-            {
-                display: flex; /* Use flexbox */
-                justify-content: space-between; /* Distribute space between cells */
+                display: inline-block;
+                padding: 5px;
+                
             }
 
             .divider-vertical {
@@ -41,6 +38,13 @@
                 background-color: #131a5f;
             }
 
+
+            /*----- Inner Board and Normal Cell -----*/
+            .box-row
+            {
+                display: flex;
+                justify-content: space-between;
+            }
 
             .cell-val {
                 /* Dimentions and Margins*/
@@ -64,32 +68,7 @@
                 color: #22bed8;
             }
 
-            /*Board and Dividers*/
-
-            .divider-vertical {
-                width: 3px; 
-                height: 150px;
-
-                background-color: #131a5f;
-            }
-
-            
-            .divider-horizontal {
-                width: 456px; 
-                height: 3px;
-
-                background-color: #131a5f;
-            }
-
-            .game-board{
-                background-color: #131a5f; 
-
-                display: inline-block; /* Add this to contain the bounds of the board */
-                padding: 5px; /* Optional: Add padding for visual appeal */
-                
-            }
-
-            /*Possiblties Cell*/
+            /*----- Possiblties Cell -----*/
             .poss-cell {
                 /* Dimentions and Margins*/
                 width: 50px; 
@@ -122,21 +101,22 @@
             }
 
             .poss-val {
-                width: 16px; /* Adjust the width of each cell */
-                height: 16px; /* Adjust the height of each cell */
-                box-sizing: border-box; /* Include border in width/height calculations */
+                width: 16px; 
+                height: 16px; 
+                box-sizing: border-box;
                 text-align: center;
-                line-height: 14px; /* Center the number vertically */
+                line-height: 14px; 
             }
 
+            /*----- Buttons ----- */
             .myButton {
                 /* Margins */
                 margin-top: 20px;
                 margin-left: 20px;
 
                 /* Colors */
-                background-color: #22bed8; /* Bright Blue */
-                color: #faf0ca; /* Back Yellow */
+                background-color: #22bed8;
+                color: #faf0ca;
                 border: black 3px;
                 padding: 10px 20px;
                 border-radius: 5px;
@@ -144,12 +124,12 @@
             }
 
             .myButton:hover {
-                background-color: #131a5f; /* Dark Blue */
-                color: #faf0ca; /* Back Yellow */
+                background-color: #131a5f;
+                color: #faf0ca;
             }
 
             .hidden {
-                display: none; /* Hide the text initially */
+                display: none;
             }
 
             .unsolved-text {
@@ -1864,84 +1844,61 @@
 
    <!-- JavaScript -->
    <script>
-    ////////////////////////////////////////////////////////
-        function getCellFromCoordinates(x, y) {
-            // Calculate the box index
-            var boxIndex = Math.floor(x / 3) * 3 + Math.floor(y / 3);
+        /*******************************************
+            Buttons
+        *******************************************/
+        function solveBut() {
+            //Using information from the fetch request
+            solvePromise.then(results => {
+                console.log(results);
 
-            // Calculate the cell index within the box
-            var cellIndex = (x % 3) + (y % 3) * 3;
+                //If board is unsolved
+                if(!results[0]){
+                    console.log("Board can't be solved")
+                }
+                else{
+                    console.log("Board can be solved")
 
-            // Get the box element
-            var box = document.getElementById("box-" + (boxIndex + 1));
+                    updatesQueue = results[1];
+                    finalBoard = results[2];
+                    addedVals = results[3];
+                    initialBoard = results[4];
 
-            // Get the cell element within the box
+                    //Display Results On Baord
+                    for(x = 0; x < 9; x++){
+                        for(y = 0; y < 9; y++){             
+                            cell = pageBoard[x][y]
 
-            var allCells = [];
+                            if(finalBoard[x][y] != 0)              
+                                cell.innerHTML = `<div>${finalBoard[x][y]}</div>`;
+                            else
+                                cell.innerHTML = `<div></div>`;
 
-            // Iterate through each row in the box
-            var rows = box.querySelectorAll('.box-colum');
-            rows.forEach(row => {
-                // Get all cells in the row
-                var cells = row.querySelectorAll('.poss-cell');
-
-                // Convert NodeList to Array and push to allCells array
-                Array.from(cells).forEach(cell => {
-                    allCells.push(cell);
-                });
+                            cell.classList.remove('poss-cell');
+                            cell.classList.add('cell-val');    
+                        }
+                    }
+                }
             });
-            cell = allCells[cellIndex]
-
-            //var cell = box.querySelector('.poss-cell:nth-child(' + (cellIndex + 1) + ')');
-            return cell;
         }
 
-
-
-        function getCellsFromPage(){
-            //Get all Cells and put them into a board
-            pageBoard = []
-
-            for(x = 0; x < 9; x++){
-                row = []
-
-                for(y = 0; y < 9; y++){
-                    row.push(getCellFromCoordinates(x, y))
-                }
-
-                pageBoard.push(row)
-            }
-
-            return pageBoard
+        function backBut(){
+            window.location.assign("http://localhost:8080/Front-End/InputBoard.html");
         }
 
+        //Get Buttons with Id
+        var solveButton = document.getElementById("solveButton");
+        var backButton = document.getElementById("backButton");
 
-        // Function to initialize the Sudoku board with values from a 2D array
-        function initializeBoard(gameBoard, pageBoard) {
-            pageBoard = getCellsFromPage()
-
-            for(x = 0; x < 9; x++){
-                for(y = 0; y < 9; y++){             
-
-
-                    cell = pageBoard[x][y]
-
-                    if(gameBoard[x][y] != 0)              
-                        cell.innerHTML = `<div>${gameBoard[x][y]}</div>`;
-                    else
-                        cell.innerHTML = `<div></div>`;
+        //Add Listen Events for Buttons
+        solveButton.addEventListener("click", solveBut);
+        backButton.addEventListener("click", backBut);
 
 
 
-                    cell.classList.remove('poss-cell');
-                    cell.classList.add('cell-val');    
-                }
-            }
-
-        }
-
-
-        //---------------- Fetching Solve Solution --------------------
+        /*******************************************
+            Fetch Request to Server
+        *******************************************/
         function solveCustom(inputBoard) {
             return new Promise((resolve, reject) => {
                 fetch('http://localhost:8080/customBoard', {
@@ -1961,54 +1918,17 @@
                     info = JSON.parse(data);
                     console.log(info)
 
+                    //Not Solved Return false
                     if(!info.solved)
                         resolve([info.solved]);
 
+                    //Else return all values
                     updatesQueue = solve_parseUpdate(info);
-                    console.log(updatesQueue);
-
                     finalBoard = solve_parseBoard(info.board);
-                    console.log(finalBoard);
-
                     initialBoard = solve_parseBoard(info.initialBoard);
-                    console.log(initialBoard);
-
                     addedVals = solve_parseAddedVals(info);
-                    console.log(addedVals);
 
                     resolve([info.solved, updatesQueue, finalBoard, addedVals, initialBoard]);
-                })
-                .catch(error => reject(error));
-            });
-        }
-
-
-        function solve() {
-            return new Promise((resolve, reject) => {
-                fetch('http://localhost:8080/solve', {
-                    method: 'POST'
-                })
-                .then(response => {
-                    // Parse the JSON response
-                    return response.json();
-                })
-                .then(data => {
-                    info = JSON.parse(data);
-                    console.log(info)
-
-                    updatesQueue = solve_parseUpdate(info);
-                    console.log(updatesQueue);
-
-                    finalBoard = solve_parseBoard(info.board);
-                    console.log(finalBoard);
-
-                    initialBoard = solve_parseBoard(info.initialBoard);
-                    console.log(initialBoard);
-
-                    addedVals = solve_parseAddedVals(info);
-                    console.log(addedVals);
-
-                    resolve([updatesQueue, finalBoard, addedVals, initialBoard]);
                 })
                 .catch(error => reject(error));
             });
@@ -2087,43 +2007,105 @@
             return addedVals
         }
 
+        /*******************************************
+            Start Up Functions
+        *******************************************/
 
-        ////////////////////////////////////////////////////////
+        //Translate between cell coords on the page to coords of 2d array
+        function getCellFromCoordinates(x, y) {
+            //get Box Element
+            var boxIndex = Math.floor(x / 3) * 3 + Math.floor(y / 3);
+            var box = document.getElementById("box-" + (boxIndex + 1));
+
+            //Get Correct Cell By Looping through Box
+            var cellIndex = (x % 3) + (y % 3) * 3;
+
+            var allCells = [];
+
+            // Iterate through each row in the box
+            var rows = box.querySelectorAll('.box-colum');
+            rows.forEach(row => {
+                // Get all cells in the row
+                var cells = row.querySelectorAll('.poss-cell');
+
+                // Convert NodeList to Array and push to allCells array
+                Array.from(cells).forEach(cell => {
+                    allCells.push(cell);
+                });
+            });
+            cell = allCells[cellIndex]
+
+            return cell;
+        }
+
+        function getCellsFromPage(){
+            //Get all page Cells and put them into a 2d array 
+            pageBoard = []
+
+            for(x = 0; x < 9; x++){
+                row = []
+
+                for(y = 0; y < 9; y++){
+                    row.push(getCellFromCoordinates(x, y))
+                }
+
+                pageBoard.push(row)
+            }
+
+            return pageBoard
+        }
 
 
-        //
+        // Function to initialize the Sudoku board with values from a 2D array
+        function initializeBoard(gameBoard, pageBoard) {
+            pageBoard = getCellsFromPage()
+
+            //For each cell, put the value in the cell
+            for(x = 0; x < 9; x++){
+                for(y = 0; y < 9; y++){             
+                    cell = pageBoard[x][y]
+
+                    if(gameBoard[x][y] != 0)              
+                        cell.innerHTML = `<div>${gameBoard[x][y]}</div>`;
+                    else
+                        cell.innerHTML = `<div></div>`;
+
+                    cell.classList.remove('poss-cell');
+                    cell.classList.add('cell-val');    
+                }
+            }
+
+        }
+
+        //If No solution unhide and hide different elements
+        function revealUnsolved() {
+            var hiddenText = document.getElementById("hiddenText");
+            hiddenText.style.display = "block"; // Display the hidden text
+            solveButton.classList.add("hidden");
+        }
+
+        /*******************************************
+            Start Page Info
+        *******************************************/
+        //Get cells of page as a 2d array
         pageBoard = getCellsFromPage()
 
+        //Get Solution from fetch request
         sessionBoard = JSON.parse(sessionStorage.getItem('board'));
         console.log(sessionBoard)
         let solvePromise = solveCustom(sessionBoard);
-        let updatesQueue = null;
-        let board = null;
-        let addedVals = null;
 
-
-        // Later, when you need the results
+        //Use results to populate board
         solvePromise.then(results => {
             console.log(results);
 
-            //If board is unsolved
+            //If board is unsolved, populate with board wanted to solve
             if(!results[0]){
                 console.log("Board can't be solved")
                 revealUnsolved()
-                initializeBoard([
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0]
-                    ],  
-                    pageBoard
-                )
+                initializeBoard(sessionBoard, pageBoard)
             }
+            //If Solved, populate board
             else{
                 console.log("Board can be solved")
 
@@ -2135,75 +2117,5 @@
                 initializeBoard(initialBoard, pageBoard);
             }
         });
-
-
-
-        ///////////
-        // Define the function to be called when the button is clicked
-        function solveBut() {
-            solvePromise.then(results => {
-            console.log(results);
-
-            //If board is unsolved
-            if(!results[0]){
-                console.log("Board can't be solved")
-            }
-            else{
-                console.log("Board can be solved")
-
-                updatesQueue = results[1];
-                finalBoard = results[2];
-                addedVals = results[3];
-                initialBoard = results[4];
-
-                i = 0
-                for(x = 0; x < 9; x++){
-                    for(y = 0; y < 9; y++){             
-
-
-                        cell = pageBoard[x][y]
-
-
-
-                        if(finalBoard[x][y] != 0)              
-                            cell.innerHTML = `<div>${finalBoard[x][y]}</div>`;
-                        else
-                            cell.innerHTML = `<div></div>`;
-
-                        i++
-
-
-
-                        cell.classList.remove('poss-cell');
-                        cell.classList.add('cell-val');    
-                    }
-                }
-            }
-        });
-        }
-
-        function backBut(){
-            window.location.assign("http://localhost:8080/Front-End/InputBoard.html");
-        }
-
-        // Get the button elements by its id
-        var solveButton = document.getElementById("solveButton");
-        var backButton = document.getElementById("backButton");
-
-        // Add an event listeners to the buttons to listen for clicks
-        solveButton.addEventListener("click", solveBut);
-        backButton.addEventListener("click", backBut);
-
-
-        function revealUnsolved() {
-            var hiddenText = document.getElementById("hiddenText");
-            hiddenText.style.display = "block"; // Display the hidden text
-            solveButton.classList.add("hidden");
-        }
-
-
     </script>
-
-
-
 </html>
